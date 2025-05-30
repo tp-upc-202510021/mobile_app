@@ -1,25 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
-import 'package:mobile_app/features/authentication/presentation/screens/register_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
-  void _onLoginPressed() {
+  void _onRegisterPressed() {
+    final name = _nameController.text;
     final email = _emailController.text;
     final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
 
-    // lógica de validación, autenticación, etc.
+    if (password != confirmPassword) {
+      print('Las contraseñas no coinciden');
+      return;
+    }
+
+    // Aquí iría la lógica de registro
+    print('Nombre: $name');
     print('Email: $email');
-    print('Password: $password');
+    print('Contraseña: $password');
   }
 
   @override
@@ -32,18 +41,24 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              'Iniciar Sesión',
+              'Registrarse',
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
 
             FTextField(
+              controller: _nameController,
+              label: const Text('Nombre completo'),
+              hint: 'Juan Pérez',
+            ),
+            const SizedBox(height: 16),
+
+            FTextField(
               controller: _emailController,
               label: const Text('Correo electrónico'),
               hint: 'ejemplo@correo.com',
             ),
-
             const SizedBox(height: 16),
 
             FTextField(
@@ -52,50 +67,36 @@ class _LoginScreenState extends State<LoginScreen> {
               hint: '••••••••',
               obscureText: true,
             ),
+            const SizedBox(height: 16),
 
-            const SizedBox(height: 8),
-
-            // Olvidaste tu contraseña?
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  // lógica para recuperar contraseña
-                  print('Olvidaste tu contraseña?');
-                },
-                child: const Text(
-                  '¿Olvidaste tu contraseña?',
-                  style: TextStyle(color: Colors.blue),
-                ),
-              ),
+            FTextField(
+              controller: _confirmPasswordController,
+              label: const Text('Confirmar contraseña'),
+              hint: '••••••••',
+              obscureText: true,
             ),
-
-            const SizedBox(height: 65),
+            const SizedBox(height: 24),
 
             FButton(
-              onPress: _onLoginPressed,
-              child: const Text('Iniciar sesión'),
+              onPress: _onRegisterPressed,
+              child: const Text('Crear cuenta'),
             ),
 
-            const SizedBox(height: 1),
+            const SizedBox(height: 16),
 
-            // No tienes cuenta? Regístrate
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  '¿No tienes cuenta? ',
-                  style: TextStyle(color: Color(0xFF888888)),
+                Text(
+                  '¿Ya tienes cuenta? ',
+                  style: TextStyle(color: Colors.grey[600]),
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const RegisterScreen()),
-                    );
+                    Navigator.pop(context); // Vuelve al login
                   },
                   child: const Text(
-                    'Regístrate',
+                    'Inicia sesión',
                     style: TextStyle(color: Colors.blue),
                   ),
                 ),
