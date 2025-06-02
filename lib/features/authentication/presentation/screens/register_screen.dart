@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
+import 'package:mobile_app/features/initial_assesstment/presentation/screens/assesstment_intro_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -25,6 +26,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const IntroScreen()),
+    );
     // Aquí iría la lógica de registro
     print('Nombre: $name');
     print('Email: $email');

@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "title": "Evaluación Inicial Finanzas",
+    "description": "Encuesta para medir conocimientos básicos sobre inversiones y préstamos.",
+    "version": "1.0"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "¿Qué es una tasa de interés?",
+      "options": [
+        "Un impuesto que cobra el gobierno",
+        "Una recompensa por ahorrar dinero",
+        "El costo del dinero prestado",
+        "Un tipo de inversión"
+      ]
+    },
+    {
+      "id": 2,
+      "question": "¿Cuál es una buena práctica antes de pedir un préstamo?",
+      "options": [
+        "Pedir el monto más alto posible",
+        "Comparar tasas de interés entre bancos",
+        "Ignorar el historial crediticio",
+        "Evitar leer el contrato"
+      ]
+    },
+    {
+      "id": 3,
+      "question": "¿Qué es una inversión?",
+      "options": [
+        "Gastar en ropa nueva",
+        "Guardar dinero en casa",
+        "Poner dinero en algo esperando una ganancia",
+        "Solicitar un préstamo personal"
+      ]
+    }
+  ]
+}
