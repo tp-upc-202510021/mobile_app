@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
-import 'package:mobile_app/features/initial_assesstment/presentation/screens/quizz_screen.dart';
+import 'package:mobile_app/features/initial_assesstment/presentation/screens/quiz_screen.dart';
 
 class AgeQuestionScreen extends StatefulWidget {
   const AgeQuestionScreen({super.key});

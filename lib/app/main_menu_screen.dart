@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forui/forui.dart';
+import 'package:mobile_app/features/home/presentation/screens/home_screen.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -17,7 +18,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   final _navigatorKeys = List.generate(3, (_) => GlobalKey<NavigatorState>());
 
   late final List<Widget> _tabs = [
-    _buildTabNavigator(_navigatorKeys[0], const _DummyScreen(title: '🏠 Home')),
+    _buildTabNavigator(_navigatorKeys[0], const HomeScreen()),
     _buildTabNavigator(
       _navigatorKeys[1],
       const _DummyScreen(title: '🔍 Search'),
@@ -81,15 +82,15 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           children: const [
             FBottomNavigationBarItem(
               icon: Icon(FIcons.house),
-              label: Text('Home'),
+              label: Text('Menu'),
             ),
             FBottomNavigationBarItem(
               icon: Icon(FIcons.search),
-              label: Text('Search'),
+              label: Text('Buscar'),
             ),
             FBottomNavigationBarItem(
-              icon: Icon(FIcons.libraryBig),
-              label: Text('Profile'),
+              icon: Icon(FIcons.user),
+              label: Text('Perfil'),
             ),
           ],
         ),
