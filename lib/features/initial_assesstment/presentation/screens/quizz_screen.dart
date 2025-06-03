@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forui/forui.dart';
+import 'package:mobile_app/app/main_menu_screen.dart';
 
 class QuizScreen extends StatefulWidget {
   final int userAge;
@@ -44,6 +45,11 @@ class _QuizScreenState extends State<QuizScreen> {
       });
     } else {
       print('Encuesta completada');
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const MainMenuScreen()),
+        (Route<dynamic> route) => false,
+      );
     }
   }
 
