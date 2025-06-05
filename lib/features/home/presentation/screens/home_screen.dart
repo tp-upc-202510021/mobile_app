@@ -86,7 +86,7 @@ class _HomeOption extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
         child: Row(
           children: [
-            Icon(icon, size: 40),
+            Icon(icon, size: 40, color: Colors.blueAccent),
             const SizedBox(width: 16),
             Expanded(child: Text(label, style: const TextStyle(fontSize: 18))),
             const Icon(Icons.arrow_forward_ios),

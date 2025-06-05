@@ -41,13 +41,26 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     if (_currentIndex != index) {
       setState(() {
         _currentIndex = index;
-        // Elimina todas las ocurrencias previas del índice para evitar duplicados intermedios
         _tabHistory.removeWhere((i) => i == index);
-        // Luego agrega el índice actual al final
         _tabHistory.add(index);
       });
       print('Tab history: $_tabHistory');
     }
+  }
+
+  FBottomNavigationBarItem buildNavItem({
+    required IconData iconData,
+    required String label,
+    required int itemIndex,
+    required int currentIndex,
+  }) {
+    final isSelected = currentIndex == itemIndex;
+    final color = isSelected ? Colors.blueAccent : Colors.grey;
+
+    return FBottomNavigationBarItem(
+      icon: Icon(iconData, color: color),
+      label: Text(label, style: TextStyle(color: color)),
+    );
   }
 
   @override
@@ -72,25 +85,30 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             'No more navigation back possible, exiting app if system allows',
           );
           SystemNavigator.pop();
-          // No pop here - let system handle app exit
         }
       },
       child: FScaffold(
         footer: FBottomNavigationBar(
           index: _currentIndex,
           onChange: _onTabChanged,
-          children: const [
-            FBottomNavigationBarItem(
-              icon: Icon(FIcons.house),
-              label: Text('Menu'),
+          children: [
+            buildNavItem(
+              iconData: FIcons.house,
+              label: 'Menu',
+              itemIndex: 0,
+              currentIndex: _currentIndex,
             ),
-            FBottomNavigationBarItem(
-              icon: Icon(FIcons.search),
-              label: Text('Buscar'),
+            buildNavItem(
+              iconData: FIcons.search,
+              label: 'Buscar',
+              itemIndex: 1,
+              currentIndex: _currentIndex,
             ),
-            FBottomNavigationBarItem(
-              icon: Icon(FIcons.user),
-              label: Text('Perfil'),
+            buildNavItem(
+              iconData: FIcons.user,
+              label: 'Perfil',
+              itemIndex: 2,
+              currentIndex: _currentIndex,
             ),
           ],
         ),
@@ -100,7 +118,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   }
 }
 
-// Las otras tabs simples (Home, Search)
+// Las otras tabs simples (Home, Search, Perfil)
 class _DummyScreen extends StatelessWidget {
   final String title;
   const _DummyScreen({required this.title});
