@@ -12,13 +12,9 @@ class ProfileScreen extends StatelessWidget {
       header: FHeader(title: const Text('Perfil')),
       child: Center(
         child: FButton(
-          onPress: () {
-            // Llama al logout del cubit
-            context.read<AuthCubit>().logout();
-            // Navega a pantalla de login o limpia stack si quieres
-            Navigator.of(
-              context,
-            ).pushNamedAndRemoveUntil('/login', (route) => false);
+          onPress: () async {
+            // Primero, cerrar sesión
+            await context.read<AuthCubit>().logout();
           },
           child: const Text('Cerrar sesión'),
         ),

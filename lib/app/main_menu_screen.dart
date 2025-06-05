@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:forui/forui.dart';
+import 'package:mobile_app/features/authentication/presentation/cubit/auth_cubit.dart';
+import 'package:mobile_app/features/authentication/presentation/screens/login_screen.dart';
 import 'package:mobile_app/features/home/presentation/screens/home_screen.dart';
 import 'package:mobile_app/features/profile/presentation/profile_screen.dart';
 
@@ -27,7 +30,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     _buildTabNavigator(_navigatorKeys[2], const ProfileScreen()),
   ];
 
-  Widget _buildTabNavigator(GlobalKey<NavigatorState> key, Widget child) {
+  static Widget _buildTabNavigator(
+    GlobalKey<NavigatorState> key,
+    Widget child,
+  ) {
     return Navigator(
       key: key,
       onGenerateRoute: (_) => MaterialPageRoute(builder: (_) => child),
@@ -35,14 +41,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   }
 
   void _onTabChanged(int index) {
-    print('Tapped tab $index');
     if (_currentIndex != index) {
       setState(() {
         _currentIndex = index;
         _tabHistory.removeWhere((i) => i == index);
         _tabHistory.add(index);
       });
-      print('Tab history: $_tabHistory');
     }
   }
 
@@ -63,60 +67,66 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
-        print('Back button pressed on tab $_currentIndex');
-        final currentNavigator = _navigatorKeys[_currentIndex].currentState!;
-        if (currentNavigator.canPop()) {
-          print('Popping navigator stack of tab $_currentIndex');
-          currentNavigator.pop();
-        } else if (_tabHistory.length > 1) {
-          _tabHistory.removeLast();
-          final previousTab = _tabHistory.last;
-          print('Switching to previous tab $previousTab');
-          setState(() {
-            _currentIndex = previousTab;
-          });
-        } else {
-          print(
-            'No more navigation back possible, exiting app if system allows',
+    return BlocListener<AuthCubit, AuthState>(
+      listenWhen: (previous, current) =>
+          previous.isAuthenticated != current.isAuthenticated,
+      listener: (context, state) {
+        if (!state.isAuthenticated) {
+          // Navegar a login limpiando todo el stack
+          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
+            (route) => false,
           );
-          SystemNavigator.pop();
         }
       },
-      child: FScaffold(
-        footer: FBottomNavigationBar(
-          index: _currentIndex,
-          onChange: _onTabChanged,
-          children: [
-            buildNavItem(
-              iconData: FIcons.house,
-              label: 'Menu',
-              itemIndex: 0,
-              currentIndex: _currentIndex,
-            ),
-            buildNavItem(
-              iconData: FIcons.search,
-              label: 'Buscar',
-              itemIndex: 1,
-              currentIndex: _currentIndex,
-            ),
-            buildNavItem(
-              iconData: FIcons.user,
-              label: 'Perfil',
-              itemIndex: 2,
-              currentIndex: _currentIndex,
-            ),
-          ],
+      child: PopScope(
+        canPop: true,
+        onPopInvokedWithResult: (didPop, result) async {
+          final currentNavigator = _navigatorKeys[_currentIndex].currentState!;
+          if (currentNavigator.canPop()) {
+            currentNavigator.pop();
+          } else if (_tabHistory.length > 1) {
+            _tabHistory.removeLast();
+            final previousTab = _tabHistory.last;
+            setState(() {
+              _currentIndex = previousTab;
+            });
+          } else {
+            SystemNavigator.pop();
+          }
+        },
+        child: FScaffold(
+          footer: FBottomNavigationBar(
+            index: _currentIndex,
+            onChange: _onTabChanged,
+            children: [
+              buildNavItem(
+                iconData: FIcons.house,
+                label: 'Menu',
+                itemIndex: 0,
+                currentIndex: _currentIndex,
+              ),
+              buildNavItem(
+                iconData: FIcons.search,
+                label: 'Buscar',
+                itemIndex: 1,
+                currentIndex: _currentIndex,
+              ),
+              buildNavItem(
+                iconData: FIcons.user,
+                label: 'Perfil',
+                itemIndex: 2,
+                currentIndex: _currentIndex,
+              ),
+            ],
+          ),
+          child: IndexedStack(index: _currentIndex, children: _tabs),
         ),
-        child: IndexedStack(index: _currentIndex, children: _tabs),
       ),
     );
   }
 }
 
-// Las otras tabs simples (Home, Search, Perfil)
 class _DummyScreen extends StatelessWidget {
   final String title;
   const _DummyScreen({required this.title});
