@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
+import 'package:mobile_app/features/learning_path/presentation/cubit/learning_path_cubit.dart';
+import 'package:mobile_app/features/learning_path/presentation/screens/learning_path_screen.dart';
+import 'package:mobile_app/features/learning_path/repositories/learning_path_repository.dart';
+import 'package:mobile_app/features/learning_path/services/learning_path_service.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -14,6 +19,18 @@ class HomeScreen extends StatelessWidget {
             icon: FIcons.graduationCap,
             label: 'Ruta de aprendizaje',
             onTap: () {
+              // Aquí puedes navegar a la pantalla de Ruta de Aprendizaje
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider(
+                    create: (_) => LearningPathCubit(
+                      LearningPathRepository(LearningPathService()),
+                    )..loadLearningPath(),
+                    child: const LearningPathScreen(),
+                  ),
+                ),
+              );
               print('Ir a Ruta de aprendizaje');
             },
           ),
