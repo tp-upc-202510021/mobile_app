@@ -18,7 +18,15 @@ class LearningPathService {
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      return jsonDecode(response.body); // respuesta con módulos
+    } else if (response.statusCode == 404) {
+      // No hay ruta de aprendizaje → construimos manualmente un modelo vacío
+      return {
+        "learning_path_id": null,
+        "user_id": null,
+        "created_at": null,
+        "modules": [],
+      };
     } else {
       throw Exception('Failed to load learning path');
     }

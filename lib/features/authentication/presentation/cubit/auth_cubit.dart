@@ -6,24 +6,61 @@ class AuthState {
   final bool loading;
   final UserModel? user;
   final String? error;
+  final bool isAuthenticated;
 
-  AuthState({this.loading = false, this.user, this.error});
+  AuthState({
+    this.loading = false,
+    this.user,
+    this.error,
+    this.isAuthenticated = false,
+  });
+
+  AuthState copyWith({
+    bool? loading,
+    UserModel? user,
+    String? error,
+    bool? isAuthenticated,
+  }) {
+    return AuthState(
+      loading: loading ?? this.loading,
+      user: user ?? this.user,
+      error: error ?? this.error,
+      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
+    );
+  }
 }
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _repository;
 
-  AuthCubit(this._repository) : super(AuthState());
+  AuthCubit(this._repository) : super(AuthState()) {
+    checkAuthStatus();
+  }
+
+  Future<void> checkAuthStatus() async {
+    emit(state.copyWith(loading: true));
+    final token = await _repository.getAccessToken();
+    if (token != null && token.isNotEmpty) {
+      // You can also fetch user info here if you want
+      emit(state.copyWith(loading: false, isAuthenticated: true));
+    } else {
+      emit(state.copyWith(loading: false, isAuthenticated: false));
+    }
+  }
 
   Future<void> login(String email, String password) async {
-    emit(AuthState(loading: true));
+    emit(state.copyWith(loading: true, error: null));
     try {
-      print('🔐 Attempting to login with email: $email');
       final user = await _repository.login(email, password);
       await _repository.printStoredTokens();
-      emit(AuthState(user: user));
+      emit(state.copyWith(user: user, loading: false, isAuthenticated: true));
     } catch (e) {
-      emit(AuthState(error: e.toString()));
+      emit(state.copyWith(error: e.toString(), loading: false));
     }
+  }
+
+  Future<void> logout() async {
+    await _repository.logout();
+    emit(state.copyWith(isAuthenticated: false, user: null));
   }
 }

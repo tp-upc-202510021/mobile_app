@@ -34,6 +34,18 @@ class LearningPathScreen extends StatelessWidget {
             return Center(child: Text('Error: ${state.error}'));
           } else if (state.data != null) {
             final modules = state.data!.modules;
+            if (modules.isEmpty) {
+              return Center(
+                child: FButton(
+                  onPress: () {
+                    print('Generar nuevo Learning Path');
+                    // Aquí podrías llamar a un método del cubit
+                  },
+                  child: const Text('Generar Learning Path'),
+                ),
+              );
+            }
+
             return ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 8),
               itemCount: modules.length,
@@ -52,7 +64,15 @@ class LearningPathScreen extends StatelessWidget {
               },
             );
           } else {
-            return const Center(child: Text('No hay datos'));
+            // Caso raro: sin error y sin data
+            return Center(
+              child: FButton(
+                onPress: () {
+                  print('Generar nuevo Learning Path');
+                },
+                child: const Text('Generar Learning Path'),
+              ),
+            );
           }
         },
       ),

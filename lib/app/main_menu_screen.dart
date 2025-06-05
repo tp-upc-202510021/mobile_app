@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forui/forui.dart';
 import 'package:mobile_app/features/home/presentation/screens/home_screen.dart';
+import 'package:mobile_app/features/profile/presentation/profile_screen.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -23,10 +24,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       _navigatorKeys[1],
       const _DummyScreen(title: '🔍 Search'),
     ),
-    _buildTabNavigator(
-      _navigatorKeys[2],
-      const _DummyScreen(title: '🔍 Perfil'),
-    ),
+    _buildTabNavigator(_navigatorKeys[2], const ProfileScreen()),
   ];
 
   Widget _buildTabNavigator(GlobalKey<NavigatorState> key, Widget child) {
