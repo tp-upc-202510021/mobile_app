@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
-import 'package:mobile_app/features/initial_assesstment/presentation/screens/quiz_screen.dart';
 
 class AgeQuestionScreen extends StatefulWidget {
   const AgeQuestionScreen({super.key});
@@ -37,10 +36,6 @@ class _AgeQuestionScreenState extends State<AgeQuestionScreen> {
                   onPress: () {
                     final age = int.tryParse(_ageController.text);
                     if (age != null && age > 0) {
-                      Navigator.push(
-                        contextInside,
-                        MaterialPageRoute(builder: (_) => QuizScreen()),
-                      );
                     } else {
                       showFToast(
                         context: contextInside,

@@ -5,7 +5,8 @@ import 'package:forui/forui.dart';
 import 'package:mobile_app/app/main_menu_screen.dart';
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({super.key});
+  final String preference;
+  const QuizScreen({super.key, required this.preference});
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -29,8 +30,27 @@ class _QuizScreenState extends State<QuizScreen> {
     );
     final Map<String, dynamic> data = json.decode(jsonString);
 
+    List<dynamic> allQuestions = data['questions'];
+
+    List<dynamic> filteredQuestions = [];
+
+    if (widget.preference == 'loans') {
+      filteredQuestions = allQuestions.where((q) {
+        final id = q['id'] as String;
+        return id.startsWith('mat_') || id.startsWith('pres_');
+      }).toList();
+    } else if (widget.preference == 'investments') {
+      filteredQuestions = allQuestions.where((q) {
+        final id = q['id'] as String;
+        return id.startsWith('mat_') || id.startsWith('inv_');
+      }).toList();
+    } else {
+      // Por si acaso, si preference es otro valor, usa todo o vacío
+      filteredQuestions = allQuestions;
+    }
+
     setState(() {
-      questions = data['questions'];
+      questions = filteredQuestions;
       isLoading = false;
     });
   }

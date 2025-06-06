@@ -19,6 +19,23 @@ class AuthRepository {
     return user;
   }
 
+  Future<UserModel> register({
+    required String name,
+    required String email,
+    required String password,
+    required int age,
+    required String preference,
+  }) async {
+    final data = await _service.register(
+      name: name,
+      email: email,
+      password: password,
+      age: age,
+      preference: preference,
+    );
+    return UserModel.fromJson(data);
+  }
+
   Future<void> logout() async {
     await _storage.delete(key: 'access_token');
     await _storage.delete(key: 'refresh_token');

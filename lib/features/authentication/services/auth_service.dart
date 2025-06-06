@@ -19,4 +19,31 @@ class AuthService {
       throw Exception('Failed to login');
     }
   }
+
+  Future<Map<String, dynamic>> register({
+    required String name,
+    required String email,
+    required String password,
+    required int age,
+    required String preference,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/register/'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'name': name,
+        'email': email,
+        'password': password,
+        'age': age,
+        'preference': preference,
+      }),
+    );
+    print('Register response: ${response.body}');
+
+    if (response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to register');
+    }
+  }
 }
