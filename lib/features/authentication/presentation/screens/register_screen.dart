@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
+import 'package:mobile_app/features/initial_assesstment/presentation/screens/quiz_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -27,7 +28,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final confirmPassword = _confirmPasswordController.text;
     final ageText = _ageController.text.trim();
     final age = int.tryParse(ageText);
-
+    // Navega o muestra algo luego de registro, por ejemplo:
+    Navigator.push(context, MaterialPageRoute(builder: (_) => QuizScreen()));
     setState(() {
       _preferenceError = null;
     });
@@ -68,9 +70,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     print('Edad: $age');
     print('Contraseña: $password');
     print('Preferencia: $preference');
-
-    // Navega o muestra algo luego de registro, por ejemplo:
-    // Navigator.push(context, MaterialPageRoute(builder: (_) => SomeNextScreen()));
   }
 
   @override

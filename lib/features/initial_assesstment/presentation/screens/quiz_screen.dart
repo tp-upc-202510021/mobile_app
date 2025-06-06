@@ -5,9 +5,7 @@ import 'package:forui/forui.dart';
 import 'package:mobile_app/app/main_menu_screen.dart';
 
 class QuizScreen extends StatefulWidget {
-  final int userAge;
-
-  const QuizScreen({super.key, required this.userAge});
+  const QuizScreen({super.key});
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -32,7 +30,7 @@ class _QuizScreenState extends State<QuizScreen> {
     final Map<String, dynamic> data = json.decode(jsonString);
 
     setState(() {
-      questions = data['questions']; //   lista dentro del map
+      questions = data['questions'];
       isLoading = false;
     });
   }
@@ -75,7 +73,7 @@ class _QuizScreenState extends State<QuizScreen> {
             const SizedBox(height: 24),
             ...List<Widget>.from(
               question['options'].map<Widget>((option) {
-                final isSelected = option == selectedAnswer;
+                final isSelected = selectedAnswer == option['option'];
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: FButton(
@@ -83,11 +81,13 @@ class _QuizScreenState extends State<QuizScreen> {
                         ? FButtonStyle.primary
                         : FButtonStyle.secondary,
                     onPress: () {
-                      setState(() => selectedAnswer = option);
+                      setState(() {
+                        selectedAnswer = option['option'];
+                      });
                     },
                     child: Flexible(
                       child: Text(
-                        option,
+                        option['text'],
                         softWrap: true,
                         overflow: TextOverflow.visible,
                         textAlign: TextAlign.center,

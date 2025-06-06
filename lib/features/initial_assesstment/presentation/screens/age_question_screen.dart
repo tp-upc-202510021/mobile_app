@@ -39,9 +39,7 @@ class _AgeQuestionScreenState extends State<AgeQuestionScreen> {
                     if (age != null && age > 0) {
                       Navigator.push(
                         contextInside,
-                        MaterialPageRoute(
-                          builder: (_) => QuizScreen(userAge: age),
-                        ),
+                        MaterialPageRoute(builder: (_) => QuizScreen()),
                       );
                     } else {
                       showFToast(
