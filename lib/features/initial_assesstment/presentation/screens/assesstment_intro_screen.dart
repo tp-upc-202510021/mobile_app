@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
-import 'package:mobile_app/features/initial_assesstment/presentation/screens/age_question_screen.dart';
+import 'package:mobile_app/features/initial_assesstment/presentation/screens/quiz_screen.dart';
 //import 'question_screen.dart'; // Asegúrate de crear esta luego
 
 class IntroScreen extends StatelessWidget {
-  const IntroScreen({super.key});
+  final String preference;
+  const IntroScreen({super.key, required this.preference});
 
   void _startAssessment(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const AgeQuestionScreen()),
+      MaterialPageRoute(builder: (_) => QuizScreen(preference: preference)),
     );
   }
 

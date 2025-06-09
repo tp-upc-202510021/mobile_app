@@ -33,7 +33,18 @@ class AuthRepository {
       age: age,
       preference: preference,
     );
-    return UserModel.fromJson(data);
+
+    // Guardar tokens
+    await _storage.write(key: 'access_token', value: data['access']);
+    await _storage.write(key: 'refresh_token', value: data['refresh']);
+
+    // Eliminar tokens antes de construir el modelo
+    data.remove('access');
+    data.remove('refresh');
+
+    final user = UserModel.fromJson(data);
+
+    return user;
   }
 
   Future<void> logout() async {

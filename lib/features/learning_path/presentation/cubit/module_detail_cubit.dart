@@ -1,0 +1,27 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_app/features/learning_path/models/module_detail_model.dart';
+import 'package:mobile_app/features/learning_path/repositories/learning_path_repository.dart';
+
+class ModuleDetailState {
+  final bool loading;
+  final ModuleDetailModel? data;
+  final String? error;
+
+  ModuleDetailState({this.loading = false, this.data, this.error});
+}
+
+class ModuleDetailCubit extends Cubit<ModuleDetailState> {
+  final LearningPathRepository _repository;
+
+  ModuleDetailCubit(this._repository) : super(ModuleDetailState());
+
+  Future<void> loadModuleDetail(int moduleId) async {
+    emit(ModuleDetailState(loading: true));
+    try {
+      final moduleDetail = await _repository.getModuleDetail(moduleId);
+      emit(ModuleDetailState(data: moduleDetail));
+    } catch (e) {
+      emit(ModuleDetailState(error: e.toString()));
+    }
+  }
+}

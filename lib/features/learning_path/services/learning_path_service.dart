@@ -18,9 +18,8 @@ class LearningPathService {
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body); // respuesta con módulos
+      return jsonDecode(response.body);
     } else if (response.statusCode == 404) {
-      // No hay ruta de aprendizaje → construimos manualmente un modelo vacío
       return {
         "learning_path_id": null,
         "user_id": null,
@@ -29,6 +28,24 @@ class LearningPathService {
       };
     } else {
       throw Exception('Failed to load learning path');
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchModuleDetail(int moduleId) async {
+    final token = await _storage.read(key: 'access_token');
+
+    final response = await http.get(
+      Uri.parse('${ApiConfig.baseUrl}/learningmodules/modules/$moduleId/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to load module detail');
     }
   }
 }

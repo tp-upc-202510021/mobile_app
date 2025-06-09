@@ -80,7 +80,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         }
       },
       child: PopScope(
-        canPop: true,
+        canPop: false,
         onPopInvokedWithResult: (didPop, result) async {
           final currentNavigator = _navigatorKeys[_currentIndex].currentState!;
           if (currentNavigator.canPop()) {

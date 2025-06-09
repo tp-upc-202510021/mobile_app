@@ -4,6 +4,7 @@ import 'package:forui/forui.dart';
 import 'package:mobile_app/features/authentication/presentation/cubit/register_cubit.dart';
 import 'package:mobile_app/features/authentication/repositories/auth_repository.dart';
 import 'package:mobile_app/features/authentication/services/auth_service.dart';
+import 'package:mobile_app/features/initial_assesstment/presentation/screens/assesstment_intro_screen.dart';
 import 'package:mobile_app/features/initial_assesstment/presentation/screens/quiz_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -122,8 +123,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (_) =>
-                      QuizScreen(preference: state.user!.preference ?? 'loans'),
+                  builder: (_) => IntroScreen(
+                    preference: state.user!.preference ?? 'loans',
+                  ),
                 ),
               );
             }

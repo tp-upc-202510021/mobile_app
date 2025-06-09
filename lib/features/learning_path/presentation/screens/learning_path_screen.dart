@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:mobile_app/features/learning_path/presentation/cubit/learning_path_cubit.dart';
+import 'package:mobile_app/features/learning_path/presentation/screens/module_detail_screen.dart';
 import 'package:mobile_app/features/learning_path/presentation/widgets/module_card.dart';
 
 class LearningPathScreen extends StatelessWidget {
@@ -51,14 +52,26 @@ class LearningPathScreen extends StatelessWidget {
               itemCount: modules.length,
               itemBuilder: (_, index) {
                 final module = modules[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 5,
-                  ),
-                  child: ModuleCard(
-                    title: module.title,
-                    level: module.level.toString(),
+                return GestureDetector(
+                  onTap: () {
+                    print('Module ID: ${module.id}');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            ModuleDetailScreen(moduleId: module.id!),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 5,
+                    ),
+                    child: ModuleCard(
+                      title: module.title,
+                      level: module.level.toString(),
+                    ),
                   ),
                 );
               },
