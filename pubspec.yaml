@@ -38,6 +38,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   http: ^1.4.0
   flutter_secure_storage: ^9.2.4
+  markdown_widget: ^2.3.2+8
 
 dev_dependencies:
   flutter_test:

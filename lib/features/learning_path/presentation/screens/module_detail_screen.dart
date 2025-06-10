@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/features/learning_path/presentation/cubit/module_detail_cubit.dart';
 import 'package:mobile_app/features/learning_path/repositories/learning_path_repository.dart';
 import 'package:mobile_app/features/learning_path/services/learning_path_service.dart';
+import 'package:markdown_widget/markdown_widget.dart'; // IMPORTANTE
 
 class ModuleDetailScreen extends StatelessWidget {
   final int moduleId;
@@ -43,10 +44,7 @@ class ModuleDetailScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     module.content.isNotEmpty
-                        ? Text(
-                            module.content,
-                            style: const TextStyle(fontSize: 14),
-                          )
+                        ? MarkdownWidget(data: module.content, shrinkWrap: true)
                         : const Text(
                             'No hay contenido disponible',
                             style: TextStyle(
