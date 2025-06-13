@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
+import 'package:mobile_app/app/app_root.dart';
 import 'package:mobile_app/app/main_menu_screen.dart';
+import 'package:mobile_app/features/authentication/presentation/cubit/auth_cubit.dart';
 
 class QuizScreen extends StatefulWidget {
   final String preference;
@@ -63,10 +66,11 @@ class _QuizScreenState extends State<QuizScreen> {
       });
     } else {
       print('Encuesta completada');
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const MainMenuScreen()),
-        (Route<dynamic> route) => false,
+
+      context.read<AuthCubit>().checkAuthStatus();
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const AppRoot()),
       );
     }
   }

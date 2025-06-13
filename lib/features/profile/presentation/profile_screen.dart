@@ -24,7 +24,6 @@ class ProfileScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Foto + nombre + editar
             Row(
               children: [
                 FAvatar(
@@ -37,7 +36,7 @@ class ProfileScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
                       Text(
-                        'Nombre del Usuario',
+                        'Usuario',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
