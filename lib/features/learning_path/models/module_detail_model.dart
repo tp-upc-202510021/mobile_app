@@ -5,7 +5,7 @@ class ModuleDetailModel {
   final String level;
   final int orderIndex;
   final bool isBlocked;
-  final String content;
+  final List<ModulePage> pages;
 
   ModuleDetailModel({
     required this.id,
@@ -14,10 +14,12 @@ class ModuleDetailModel {
     required this.level,
     required this.orderIndex,
     required this.isBlocked,
-    required this.content,
+    required this.pages,
   });
 
   factory ModuleDetailModel.fromJson(Map<String, dynamic> json) {
+    var pagesJson = json['content']['pages'] as List<dynamic>? ?? [];
+
     return ModuleDetailModel(
       id: json['id'],
       title: json['title'],
@@ -25,7 +27,18 @@ class ModuleDetailModel {
       level: json['level'],
       orderIndex: json['order_index'],
       isBlocked: json['is_blocked'],
-      content: json['content'] ?? 'Sin contenido',
+      pages: pagesJson.map((e) => ModulePage.fromJson(e)).toList(),
     );
+  }
+}
+
+class ModulePage {
+  final String type;
+  final String content;
+
+  ModulePage({required this.type, required this.content});
+
+  factory ModulePage.fromJson(Map<String, dynamic> json) {
+    return ModulePage(type: json['type'], content: json['content']);
   }
 }
