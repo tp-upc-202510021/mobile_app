@@ -56,6 +56,35 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
     super.dispose();
   }
 
+  Widget _buildPaginator(int totalPages) {
+    final visiblePages = totalPages - 1; // excluding intro
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(visiblePages, (i) {
+        final stepIndex = i + 1; // intro is index 0
+        Color color;
+        if (_currentPage == stepIndex) {
+          color = Colors.blue;
+        } else if (_currentPage > stepIndex) {
+          color = Colors.green;
+        } else {
+          color = Colors.grey.shade300;
+        }
+
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: 18,
+          height: 18,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        );
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -63,7 +92,24 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
           ModuleDetailCubit(LearningPathRepository(LearningPathService()))
             ..loadModuleDetail(widget.moduleId),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Detalle del Módulo')),
+        // Custom AppBar replaced with paginator
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: BlocBuilder<ModuleDetailCubit, ModuleDetailState>(
+            builder: (context, state) {
+              if (state.data != null) {
+                final totalPages = state.data!.pages.length + 1;
+                return Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.only(top: 20),
+                  alignment: Alignment.center,
+                  child: _buildPaginator(totalPages),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
         body: BlocBuilder<ModuleDetailCubit, ModuleDetailState>(
           builder: (context, state) {
             if (state.loading) {
@@ -75,7 +121,6 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
               final pages = module.pages;
               final totalPages = pages.length + 1;
 
-              // Inicializar videoControllers solo si está vacío
               if (_videoControllers.isEmpty) {
                 _videoControllers = pages.map((page) {
                   if (page.type == 'video') {
@@ -87,20 +132,6 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
 
               return Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Center(
-                      child: _currentPage > 0
-                          ? Text(
-                              'Página $_currentPage de ${totalPages - 1}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
-                            )
-                          : const SizedBox.shrink(),
-                    ),
-                  ),
                   Expanded(
                     child: PageView.builder(
                       controller: _pageController,
@@ -132,8 +163,7 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                                 const Spacer(),
                                 Center(
                                   child: ElevatedButton(
-                                    onPressed: () =>
-                                        _pageController.jumpToPage(1),
+                                    onPressed: () => _nextPage(totalPages),
                                     child: const Text('Comenzar'),
                                   ),
                                 ),
@@ -165,13 +195,28 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                               ),
-                              child: YoutubePlayerBuilder(
-                                player: YoutubePlayer(
-                                  controller: controller,
-                                  showVideoProgressIndicator: true,
-                                  progressIndicatorColor: Colors.redAccent,
-                                ),
-                                builder: (context, player) => player,
+
+                              child: FutureBuilder(
+                                future: Future.delayed(
+                                  const Duration(milliseconds: 300),
+                                ), // Simula carga
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState !=
+                                      ConnectionState.done) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+
+                                  return YoutubePlayerBuilder(
+                                    player: YoutubePlayer(
+                                      controller: controller,
+                                      showVideoProgressIndicator: true,
+                                      progressIndicatorColor: Colors.redAccent,
+                                    ),
+                                    builder: (context, player) => player,
+                                  );
+                                },
                               ),
                             );
 
@@ -183,6 +228,7 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                       },
                     ),
                   ),
+                  // Navigation buttons
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
