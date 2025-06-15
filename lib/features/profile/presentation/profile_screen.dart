@@ -136,7 +136,7 @@ class ProfileScreen extends StatelessWidget {
                     },
                     child: const Text(
                       'Cerrar sesión',
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(color: Colors.red),
                     ),
                   ),
                 ],

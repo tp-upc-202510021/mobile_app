@@ -160,13 +160,6 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                                   module.description,
                                   style: const TextStyle(fontSize: 16),
                                 ),
-                                const Spacer(),
-                                Center(
-                                  child: ElevatedButton(
-                                    onPressed: () => _nextPage(totalPages),
-                                    child: const Text('Comenzar'),
-                                  ),
-                                ),
                               ],
                             ),
                           );
@@ -234,27 +227,37 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                       horizontal: 16,
                       vertical: 12,
                     ),
-                    child: Visibility(
-                      visible: _currentPage > 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            onPressed: _prevPage,
-                            child: const Text('Anterior'),
-                          ),
-                          ElevatedButton(
-                            onPressed: _currentPage < totalPages - 1
-                                ? () => _nextPage(totalPages)
-                                : null,
-                            child: Text(
-                              _currentPage == totalPages - 1
-                                  ? 'Finalizado'
-                                  : 'Siguiente',
+                    child: Builder(
+                      builder: (context) {
+                        if (_currentPage == 0) {
+                          return Center(
+                            child: ElevatedButton(
+                              onPressed: () => _nextPage(totalPages),
+                              child: const Text('Comenzar'),
                             ),
-                          ),
-                        ],
-                      ),
+                          );
+                        }
+
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              onPressed: _prevPage,
+                              child: const Text('Anterior'),
+                            ),
+                            ElevatedButton(
+                              onPressed: _currentPage < totalPages - 1
+                                  ? () => _nextPage(totalPages)
+                                  : null,
+                              child: Text(
+                                _currentPage == totalPages - 1
+                                    ? 'Finalizado'
+                                    : 'Siguiente',
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ],
