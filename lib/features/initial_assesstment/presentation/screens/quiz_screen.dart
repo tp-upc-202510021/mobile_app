@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:mobile_app/app/app_root.dart';
-import 'package:mobile_app/app/main_menu_screen.dart';
 import 'package:mobile_app/features/authentication/presentation/cubit/auth_cubit.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -28,34 +27,36 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   Future<void> loadQuestions() async {
-    final String jsonString = await rootBundle.loadString(
-      'assets/data/evaluation_questions.json',
-    );
-    final Map<String, dynamic> data = json.decode(jsonString);
-
-    List<dynamic> allQuestions = data['questions'];
-
-    List<dynamic> filteredQuestions = [];
+    String filePath;
 
     if (widget.preference == 'loans') {
-      filteredQuestions = allQuestions.where((q) {
-        final id = q['id'] as String;
-        return id.startsWith('mat_') || id.startsWith('pres_');
-      }).toList();
+      filePath = 'assets/data/loans_questions.json';
     } else if (widget.preference == 'investments') {
-      filteredQuestions = allQuestions.where((q) {
-        final id = q['id'] as String;
-        return id.startsWith('mat_') || id.startsWith('inv_');
-      }).toList();
+      filePath = 'assets/data/investments_questions.json';
     } else {
-      // Por si acaso, si preference es otro valor, usa todo o vacío
-      filteredQuestions = allQuestions;
+      // Opción por defecto si el valor de preference es inválido
+      setState(() {
+        isLoading = false;
+        questions = [];
+      });
+      return;
     }
 
-    setState(() {
-      questions = filteredQuestions;
-      isLoading = false;
-    });
+    try {
+      final String jsonString = await rootBundle.loadString(filePath);
+      final List<dynamic> loadedQuestions = json.decode(jsonString);
+
+      setState(() {
+        questions = loadedQuestions;
+        isLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Error loading questions: $e');
+      setState(() {
+        questions = [];
+        isLoading = false;
+      });
+    }
   }
 
   void _nextQuestion() {
@@ -66,9 +67,7 @@ class _QuizScreenState extends State<QuizScreen> {
       });
     } else {
       print('Encuesta completada');
-
       context.read<AuthCubit>().checkAuthStatus();
-
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const AppRoot()),
       );
@@ -81,7 +80,14 @@ class _QuizScreenState extends State<QuizScreen> {
       return const FScaffold(child: Center(child: CircularProgressIndicator()));
     }
 
+    if (questions.isEmpty) {
+      return const FScaffold(
+        child: Center(child: Text('No se encontraron preguntas.')),
+      );
+    }
+
     final question = questions[currentQuestionIndex];
+    final Map<String, dynamic> answers = question['answers'];
 
     return FScaffold(
       child: Padding(
@@ -90,37 +96,41 @@ class _QuizScreenState extends State<QuizScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              question['question'],
+              question['question_text'],
               style: const TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
-            ...List<Widget>.from(
-              question['options'].map<Widget>((option) {
-                final isSelected = selectedAnswer == option['option'];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: FButton(
-                    style: isSelected
-                        ? FButtonStyle.primary
-                        : FButtonStyle.secondary,
-                    onPress: () {
-                      setState(() {
-                        selectedAnswer = option['option'];
-                      });
-                    },
-                    child: Flexible(
-                      child: Text(
-                        option['text'],
-                        softWrap: true,
-                        overflow: TextOverflow.visible,
-                        textAlign: TextAlign.center,
-                      ),
+
+            // Renderiza las opciones a, b, c, d
+            ...answers.entries.map((entry) {
+              final optionKey = entry.key; // "a", "b", etc.
+              final answerText = entry.value['answer_text'];
+              final isSelected = selectedAnswer == optionKey;
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: FButton(
+                  style: isSelected
+                      ? FButtonStyle.primary
+                      : FButtonStyle.secondary,
+                  onPress: () {
+                    setState(() {
+                      selectedAnswer = optionKey;
+                    });
+                  },
+                  child: Flexible(
+                    child: Text(
+                      answerText,
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                );
-              }),
-            ),
+                ),
+              );
+            }),
+
             const SizedBox(height: 35),
             FButton(
               onPress: selectedAnswer != null ? _nextQuestion : null,

@@ -1,0 +1,117 @@
+[
+  {
+    "question_id": 1,
+    "question_text": "Si inviertes S/ 1,000 en un fondo que tiene una TREA (Tasa de Rendimiento Efectivo Anual) del 8%, ¿qué significa esto al cabo de un año?",
+    "section_block": "1-4",
+    "answers": {
+      "a": {
+        "answer_text": "Significa que mi ganancia aproximada es de S/ 80, porque la TREA representa el rendimiento neto en un año.",
+        "assigned_modules": []
+      },
+      "b": {
+        "answer_text": "Significa que mi dinero está seguro como en una cuenta de ahorros, pero no necesariamente genera ganancias.",
+        "assigned_modules": [3, 4]
+      },
+      "c": {
+        "answer_text": "Ganaré más de S/ 80, porque el interés compuesto hace que la ganancia sea mucho mayor en el primer año.",
+        "assigned_modules": [1, 2]
+      },
+      "d": {
+        "answer_text": "No estoy seguro qué es la TREA ni cómo se diferencia de una simple cuenta de ahorros.",
+        "assigned_modules": [1, 2, 3, 4]
+      }
+    }
+  },
+  {
+    "question_id": 2,
+    "question_text": "Un inversionista joven quiere invertir para su jubilación (un 'horizonte' de 30 años) y tiene una alta tolerancia al 'riesgo'. ¿Qué estrategia de inversión sería la más adecuada para su 'perfil'?",
+    "section_block": "5-8",
+    "answers": {
+      "a": {
+        "answer_text": "Una cartera diversificada con un mayor porcentaje en acciones, buscando mayor rentabilidad a largo plazo.",
+        "assigned_modules": []
+      },
+      "b": {
+        "answer_text": "Invertir todo su dinero en las acciones de una sola empresa tecnológica que parece muy prometedora.",
+        "assigned_modules": [6]
+      },
+      "c": {
+        "answer_text": "Poner todo su dinero en un depósito a plazo fijo para no arriesgar absolutamente nada.",
+        "assigned_modules": [5, 7, 8]
+      },
+      "d": {
+        "answer_text": "No entiendo qué es el riesgo, el perfil o por qué el tiempo es importante al invertir.",
+        "assigned_modules": [5, 6, 7, 8]
+      }
+    }
+  },
+  {
+    "question_id": 3,
+    "question_text": "Si tu inversión en Soles te dio un rendimiento del 10% en un año, pero la 'inflación' en Perú fue del 3% en ese mismo año, ¿cuál fue tu 'ganancia real' aproximada?",
+    "section_block": "9-12",
+    "answers": {
+      "a": {
+        "answer_text": "Mi ganancia real fue de aproximadamente 7%, porque la inflación redujo el poder de compra de mi dinero.",
+        "assigned_modules": []
+      },
+      "b": {
+        "answer_text": "Gané un 10% neto, la inflación no afecta el cálculo del rendimiento de una inversión.",
+        "assigned_modules": [10, 12]
+      },
+      "c": {
+        "answer_text": "Para evitar la inflación, siempre es obligatorio invertir en dólares, nunca en soles.",
+        "assigned_modules": [10, 11]
+      },
+      "d": {
+        "answer_text": "No sé cómo la inflación afecta mis ganancias ni por qué debería fijarme metas financieras.",
+        "assigned_modules": [9, 10, 11, 12]
+      }
+    }
+  },
+  {
+    "question_id": 4,
+    "question_text": "Si eres un principiante que busca una forma sencilla de 'invertir en muchas acciones y bonos a la vez' sin tener que elegirlos uno por uno, ¿qué producto financiero es el más adecuado?",
+    "section_block": "13-16",
+    "answers": {
+      "a": {
+        "answer_text": "Un Fondo Mutuo, porque es una cartera ya diversificada y administrada por profesionales.",
+        "assigned_modules": []
+      },
+      "b": {
+        "answer_text": "Comprar acciones de una sola empresa grande directamente en la Bolsa de Valores de Lima (BVL).",
+        "assigned_modules": [14, 15]
+      },
+      "c": {
+        "answer_text": "Un depósito a plazo fijo, ya que es la única inversión que combina acciones y bonos de forma segura.",
+        "assigned_modules": [13, 14]
+      },
+      "d": {
+        "answer_text": "Realmente no conozco la diferencia entre acciones, bonos, fondos mutuos u otras alternativas.",
+        "assigned_modules": [13, 14, 15, 16]
+      }
+    }
+  },
+  {
+    "question_id": 5,
+    "question_text": "Si inviertes en la Bolsa de Valores de Lima (BVL) y vendes tus acciones obteniendo una ganancia, ¿qué obligación tienes como ciudadano en Perú?",
+    "section_block": "17-20",
+    "answers": {
+      "a": {
+        "answer_text": "Debo declarar esa ganancia y pagar el impuesto a la renta correspondiente.",
+        "assigned_modules": []
+      },
+      "b": {
+        "answer_text": "Las ganancias en la bolsa están libres de impuestos para pequeños inversionistas.",
+        "assigned_modules": [19, 20]
+      },
+      "c": {
+        "answer_text": "La Sociedad Agente de Bolsa (SAB) se encarga de todo, no necesito preocuparme por nada más.",
+        "assigned_modules": [17, 19]
+      },
+      "d": {
+        "answer_text": "No sé cómo se compran acciones, si se pagan impuestos o quién regula este mercado.",
+        "assigned_modules": [17, 18, 19, 20]
+      }
+    }
+  }
+]

@@ -1,0 +1,117 @@
+[
+  {
+    "question_id": 1,
+    "question_text": "Si pides un préstamo de S/ 1,000 (este es el 'Capital') con una tasa de 'interés simple' del 12% anual, ¿cuánto interés generarías solo en el primer año?",
+    "section_block": "1-4",
+    "answers": {
+      "a": {
+        "answer_text": "S/ 120, porque el interés simple se calcula sobre el capital original.",
+        "assigned_modules": []
+      },
+      "b": {
+        "answer_text": "Más de S/ 120, porque los intereses se van sumando mes a mes y generando más interés.",
+        "assigned_modules": [2]
+      },
+      "c": {
+        "answer_text": "S/ 12, porque es el 1% mensual.",
+        "assigned_modules": [1, 3]
+      },
+      "d": {
+        "answer_text": "No estoy seguro de qué es el 'Capital' ni cómo se calcula un interés.",
+        "assigned_modules": [1, 2, 3, 4]
+      }
+    }
+  },
+  {
+    "question_id": 2,
+    "question_text": "Si decides pagar tu préstamo en un 'plazo' más largo (ej. 5 años en vez de 3), ¿qué efecto tiene esto en tu 'cuota' mensual?",
+    "section_block": "5-8",
+    "answers": {
+      "a": {
+        "answer_text": "La cuota mensual será más baja, pero al final pagaré más intereses en total.",
+        "assigned_modules": []
+      },
+      "b": {
+        "answer_text": "La cuota mensual será más baja, por lo tanto, el préstamo es más barato.",
+        "assigned_modules": [6, 8]
+      },
+      "c": {
+        "answer_text": "La cuota mensual no cambia, solo tengo más tiempo para pagar.",
+        "assigned_modules": [5, 6, 7]
+      },
+      "d": {
+        "answer_text": "No entiendo cómo el plazo, la tasa o la cuota se relacionan entre sí.",
+        "assigned_modules": [5, 6, 7, 8]
+      }
+    }
+  },
+  {
+    "question_id": 3,
+    "question_text": "Al evaluar la oferta de un 'préstamo personal', ¿qué costos adicionales a la tasa de interés deberías buscar y preguntar?",
+    "section_block": "9-12",
+    "answers": {
+      "a": {
+        "answer_text": "Debo preguntar por comisiones, como la de apertura, y el costo de seguros como el de desgravamen.",
+        "assigned_modules": []
+      },
+      "b": {
+        "answer_text": "Solamente el seguro de desgravamen, ya que las comisiones son ilegales en Perú.",
+        "assigned_modules": [9, 11]
+      },
+      "c": {
+        "answer_text": "Ninguno, el costo de un préstamo personal es únicamente la tasa de interés.",
+        "assigned_modules": [9, 10, 11]
+      },
+      "d": {
+        "answer_text": "No sé qué es un préstamo personal ni qué costos extras podría tener.",
+        "assigned_modules": [9, 10, 11, 12]
+      }
+    }
+  },
+  {
+    "question_id": 4,
+    "question_text": "Necesitas financiar la compra de tu primer departamento. ¿Qué producto financiero está diseñado específicamente para ese fin?",
+    "section_block": "13-16",
+    "answers": {
+      "a": {
+        "answer_text": "Un crédito hipotecario.",
+        "assigned_modules": []
+      },
+      "b": {
+        "answer_text": "Un préstamo con garantía, dejando en prenda mi auto.",
+        "assigned_modules": [14, 16]
+      },
+      "c": {
+        "answer_text": "Una tarjeta de crédito con una línea de crédito muy alta.",
+        "assigned_modules": [14, 15]
+      },
+      "d": {
+        "answer_text": "Realmente no sé diferenciar los tipos de crédito para fines específicos.",
+        "assigned_modules": [13, 14, 15, 16]
+      }
+    }
+  },
+  {
+    "question_id": 5,
+    "question_text": "De las siguientes opciones, ¿cuál describe mejor cómo puedes mejorar tu 'puntaje (score) crediticio'?",
+    "section_block": "17-20",
+    "answers": {
+      "a": {
+        "answer_text": "Pagando mis deudas a tiempo y manteniendo un nivel de endeudamiento saludable.",
+        "assigned_modules": []
+      },
+      "b": {
+        "answer_text": "Mi puntaje mejora si no uso mis tarjetas de crédito y las cancelo.",
+        "assigned_modules": [20]
+      },
+      "c": {
+        "answer_text": "El puntaje es algo que asigna el gobierno y no se puede hacer mucho para cambiarlo.",
+        "assigned_modules": [18, 20]
+      },
+      "d": {
+        "answer_text": "No sé qué es el puntaje, cómo me afecta, ni cómo puedo mejorarlo.",
+        "assigned_modules": [17, 18, 19, 20]
+      }
+    }
+  }
+]
