@@ -7,12 +7,14 @@ class RegisterState {
   final UserModel? user;
   final String? error;
   final bool success;
+  final String? token; // ✅ Se agregó el token
 
   RegisterState({
     this.loading = false,
     this.user,
     this.error,
     this.success = false,
+    this.token,
   });
 
   RegisterState copyWith({
@@ -20,12 +22,14 @@ class RegisterState {
     UserModel? user,
     String? error,
     bool? success,
+    String? token,
   }) {
     return RegisterState(
       loading: loading ?? this.loading,
       user: user ?? this.user,
       error: error ?? this.error,
       success: success ?? this.success,
+      token: token ?? this.token,
     );
   }
 }
@@ -45,6 +49,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(state.copyWith(loading: true, error: null, success: false));
 
     try {
+      // 🔐 Registra al usuario (esto guarda el token internamente)
       final user = await _repository.register(
         name: name,
         email: email,
@@ -53,8 +58,14 @@ class RegisterCubit extends Cubit<RegisterState> {
         preference: preference,
       );
 
-      print(preference);
-      emit(state.copyWith(loading: false, user: user, success: true));
+      // 🔄 Lee el token guardado
+      final token = await _repository.getAccessToken();
+      print('✅ Token leído desde storage: $token');
+
+      // ✅ Emitir nuevo estado incluyendo el token
+      emit(
+        state.copyWith(loading: false, user: user, token: token, success: true),
+      );
     } catch (e) {
       emit(state.copyWith(loading: false, error: e.toString(), success: false));
     }

@@ -117,8 +117,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 context,
               ).showSnackBar(SnackBar(content: Text(state.error!)));
             }
-            if (state.user != null) {
-              // Registro exitoso, navega al quiz
+            if (state.user != null && state.token != null) {
+              print('🔐 Token disponible en pantalla: ${state.token}');
+
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

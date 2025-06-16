@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
-import 'package:mobile_app/app/app_root.dart';
-import 'package:mobile_app/features/authentication/presentation/cubit/auth_cubit.dart';
 import 'package:mobile_app/features/initial_assesstment/models/initial_assestment_model.dart';
+import 'package:mobile_app/features/initial_assesstment/presentation/cubit/initial_assestment_cubit.dart';
+import 'package:mobile_app/features/initial_assesstment/presentation/screens/assestment_loading_screen.dart';
+import 'package:mobile_app/features/initial_assesstment/repositories/initial_assestment_repository.dart';
+import 'package:mobile_app/features/initial_assesstment/services/initial_assestment_service.dart';
 
 class QuizScreen extends StatefulWidget {
   final String preference;
@@ -76,15 +78,26 @@ class _QuizScreenState extends State<QuizScreen> {
       });
     } else {
       // Evaluación completada: imprimir el resultado o enviarlo
-      final resultJson = widget.result.toJson();
-      debugPrint('Resultado completo: ${jsonEncode(resultJson)}');
+      //debugPrint('Resultado completo: ${jsonEncode(resultJson)}');
 
       // Aquí podrías hacer un POST al backend con resultJson...
 
       // Navegación final
-      context.read<AuthCubit>().checkAuthStatus();
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const AppRoot()),
+      // context.read<AuthCubit>().checkAuthStatus();
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(builder: (context) => const AppRoot()),
+      // );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => AssessmentCubit(
+              repository: AssessmentRepository(service: AssessmentService()),
+            ),
+            child: AssessmentLoadingScreen(result: widget.result),
+          ),
+        ),
       );
     }
   }
