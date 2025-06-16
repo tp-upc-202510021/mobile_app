@@ -5,10 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:mobile_app/app/app_root.dart';
 import 'package:mobile_app/features/authentication/presentation/cubit/auth_cubit.dart';
+import 'package:mobile_app/features/initial_assesstment/models/initial_assestment_model.dart';
 
 class QuizScreen extends StatefulWidget {
   final String preference;
-  const QuizScreen({super.key, required this.preference});
+  final InitialAssessmentResult result;
+
+  const QuizScreen({super.key, required this.preference, required this.result});
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -34,7 +37,6 @@ class _QuizScreenState extends State<QuizScreen> {
     } else if (widget.preference == 'investments') {
       filePath = 'assets/data/investments_questions.json';
     } else {
-      // Opción por defecto si el valor de preference es inválido
       setState(() {
         isLoading = false;
         questions = [];
@@ -60,13 +62,26 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _nextQuestion() {
+    final question = questions[currentQuestionIndex];
+    final selectedModules =
+        question['answers'][selectedAnswer]['assigned_modules'];
+
+    // Agregar módulos al resultado acumulado
+    widget.result.addModules(selectedModules);
+
     if (currentQuestionIndex < questions.length - 1) {
       setState(() {
         currentQuestionIndex++;
         selectedAnswer = null;
       });
     } else {
-      print('Encuesta completada');
+      // Evaluación completada: imprimir el resultado o enviarlo
+      final resultJson = widget.result.toJson();
+      debugPrint('Resultado completo: ${jsonEncode(resultJson)}');
+
+      // Aquí podrías hacer un POST al backend con resultJson...
+
+      // Navegación final
       context.read<AuthCubit>().checkAuthStatus();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const AppRoot()),
@@ -101,10 +116,8 @@ class _QuizScreenState extends State<QuizScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
-
-            // Renderiza las opciones a, b, c, d
             ...answers.entries.map((entry) {
-              final optionKey = entry.key; // "a", "b", etc.
+              final optionKey = entry.key;
               final answerText = entry.value['answer_text'];
               final isSelected = selectedAnswer == optionKey;
 
@@ -130,7 +143,6 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
               );
             }),
-
             const SizedBox(height: 35),
             FButton(
               onPress: selectedAnswer != null ? _nextQuestion : null,

@@ -64,6 +64,7 @@ flutter:
   assets:
     - assets/data/investments_questions.json
     - assets/data/loans_questions.json
+    - assets/data/tone_response_questions.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

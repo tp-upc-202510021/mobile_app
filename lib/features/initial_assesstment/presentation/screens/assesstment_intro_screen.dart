@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
-import 'package:mobile_app/features/initial_assesstment/presentation/screens/quiz_screen.dart';
-//import 'question_screen.dart'; // Asegúrate de crear esta luego
+import 'package:mobile_app/features/initial_assesstment/presentation/screens/tone_response_screen.dart';
 
 class IntroScreen extends StatelessWidget {
   final String preference;
@@ -10,7 +9,9 @@ class IntroScreen extends StatelessWidget {
   void _startAssessment(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => QuizScreen(preference: preference)),
+      MaterialPageRoute(
+        builder: (_) => ToneSelectionScreen(preference: preference),
+      ),
     );
   }
 
