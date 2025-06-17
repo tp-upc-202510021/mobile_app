@@ -30,7 +30,7 @@ class _AssessmentLoadingScreenState extends State<AssessmentLoadingScreen> {
     if (_navigated) return;
     _navigated = true;
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     if (mounted) {
       context.read<AuthCubit>().checkAuthStatus();
@@ -88,9 +88,7 @@ class _AssessmentLoadingScreenState extends State<AssessmentLoadingScreen> {
                           done: isProgress
                               ? state.modulesCreated == state.totalModules
                               : true,
-                          label: isProgress
-                              ? 'Creando módulos... (${state.modulesCreated}/${state.totalModules})'
-                              : 'Creando módulos... (completado)',
+                          label: 'Creando tu primer módulo...',
                         ),
                         const SizedBox(height: 12),
                         if (isSuccess)

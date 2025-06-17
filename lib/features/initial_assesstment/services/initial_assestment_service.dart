@@ -71,7 +71,7 @@ class AssessmentService {
     return jsonDecode(response.body);
   }
 
-  Future<void> createLearningModules(List<int> moduleIds) async {
+  Future<void> createLearningModule(int moduleId) async {
     final token = await _storage.read(key: 'access_token');
     if (token == null || token.isEmpty) {
       throw Exception('Token no encontrado. Inicia sesión nuevamente.');
@@ -79,27 +79,23 @@ class AssessmentService {
 
     final url = Uri.parse('$baseUrl/learningmodules/generate-content/');
 
-    for (final moduleId in moduleIds) {
-      print(
-        '[AssessmentService] Generando contenido para módulo ID: $moduleId',
+    print('[AssessmentService] Generando contenido para módulo ID: $moduleId');
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'module_id': moduleId}),
+    );
+
+    print('[AssessmentService] Respuesta módulo $moduleId: ${response.body}');
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception(
+        'Error al generar contenido del módulo $moduleId: ${response.body}',
       );
-
-      final response = await http.post(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({'module_id': moduleId}),
-      );
-
-      print('[AssessmentService] Respuesta módulo $moduleId: ${response.body}');
-
-      if (response.statusCode != 200 && response.statusCode != 201) {
-        throw Exception(
-          'Error al generar contenido del módulo $moduleId: ${response.body}',
-        );
-      }
     }
   }
 }

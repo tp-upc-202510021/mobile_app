@@ -41,18 +41,17 @@ class AssessmentCubit extends Cubit<AssessmentState> {
           totalModules: pathData['modules'].length,
         ),
       );
-
       final moduleIds = (pathData['modules'] as List)
           .map<int>((m) => m['id'])
           .toList();
 
-      for (int i = 0; i < moduleIds.length; i++) {
-        await repository.createLearningModules([moduleIds[i]]);
+      if (moduleIds.isNotEmpty) {
+        await repository.createLearningModule(moduleIds.first);
         emit(
           AssessmentProgress(
             assessmentSent: true,
             pathCreated: true,
-            modulesCreated: i + 1,
+            modulesCreated: 1,
             totalModules: moduleIds.length,
           ),
         );
