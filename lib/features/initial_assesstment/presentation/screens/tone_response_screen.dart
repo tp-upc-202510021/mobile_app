@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mobile_app/features/initial_assesstment/models/initial_assestment_model.dart';
 import 'motivation_input_screen.dart';
 
@@ -82,9 +83,11 @@ class _ToneSelectionScreenState extends State<ToneSelectionScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Opciones visuales tipo tarjetas
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // Opciones visuales tipo tarjetas en forma de grid flexible
+              Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                alignment: WrapAlignment.center,
                 children: toneOptions.map((option) {
                   final isSelected =
                       selectedToneToGemini == option['to_gemini'];
@@ -95,7 +98,7 @@ class _ToneSelectionScreenState extends State<ToneSelectionScreen> {
                       });
                     },
                     child: Container(
-                      width: 100,
+                      width: 140,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: isSelected ? Colors.blue.shade100 : Colors.white,
@@ -114,7 +117,11 @@ class _ToneSelectionScreenState extends State<ToneSelectionScreen> {
                       ),
                       child: Column(
                         children: [
-                          const Icon(Icons.person, size: 40),
+                          Lottie.asset(
+                            option['lottie'] ?? '',
+                            height: 100,
+                            repeat: true,
+                          ),
                           const SizedBox(height: 8),
                           Text(
                             option['title'] ?? '',
@@ -123,6 +130,8 @@ class _ToneSelectionScreenState extends State<ToneSelectionScreen> {
                               fontSize: 14,
                             ),
                             textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),

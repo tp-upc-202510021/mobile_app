@@ -40,6 +40,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   markdown_widget: ^2.3.2+8
   youtube_player_flutter: ^9.1.1
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -62,9 +63,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/data/investments_questions.json
-    - assets/data/loans_questions.json
-    - assets/data/tone_response_questions.json
+    - assets/animations/
+    - assets/data/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

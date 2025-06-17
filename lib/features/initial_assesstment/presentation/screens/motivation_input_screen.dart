@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/features/initial_assesstment/models/initial_assestment_model.dart';
-import 'quiz_screen.dart';
+import 'initial_quiz_screen.dart';
 
 class MotivationInputScreen extends StatefulWidget {
   final InitialAssessmentResult result;
@@ -45,8 +45,10 @@ class _MotivationInputScreenState extends State<MotivationInputScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            QuizScreen(result: widget.result, preference: widget.preference),
+        builder: (context) => InitialQuizScreen(
+          result: widget.result,
+          preference: widget.preference,
+        ),
       ),
     );
   }

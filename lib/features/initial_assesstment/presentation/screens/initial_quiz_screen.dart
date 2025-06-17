@@ -11,17 +11,21 @@ import 'package:mobile_app/features/initial_assesstment/repositories/initial_ass
 
 import 'package:mobile_app/features/initial_assesstment/services/initial_assestment_service.dart';
 
-class QuizScreen extends StatefulWidget {
+class InitialQuizScreen extends StatefulWidget {
   final String preference;
   final InitialAssessmentResult result;
 
-  const QuizScreen({super.key, required this.preference, required this.result});
+  const InitialQuizScreen({
+    super.key,
+    required this.preference,
+    required this.result,
+  });
 
   @override
-  State<QuizScreen> createState() => _QuizScreenState();
+  State<InitialQuizScreen> createState() => _InitialQuizScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class _InitialQuizScreenState extends State<InitialQuizScreen> {
   int currentQuestionIndex = 0;
   String? selectedAnswer;
   List<dynamic> questions = [];
