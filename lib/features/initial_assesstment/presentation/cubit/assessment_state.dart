@@ -21,3 +21,17 @@ class AssessmentError extends AssessmentState {
   final String message;
   AssessmentError(this.message);
 }
+
+class AssessmentProgress extends AssessmentState {
+  final bool assessmentSent;
+  final bool pathCreated;
+  final int modulesCreated;
+  final int totalModules;
+
+  AssessmentProgress({
+    required this.assessmentSent,
+    required this.pathCreated,
+    required this.modulesCreated,
+    required this.totalModules,
+  });
+}

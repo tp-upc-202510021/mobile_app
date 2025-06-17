@@ -11,24 +11,51 @@ class AssessmentCubit extends Cubit<AssessmentState> {
 
   Future<void> submitInitialAssessment(InitialAssessmentResult result) async {
     try {
-      emit(AssessmentLoading());
+      emit(
+        AssessmentProgress(
+          assessmentSent: false,
+          pathCreated: false,
+          modulesCreated: 0,
+          totalModules: 0,
+        ),
+      );
+
       await repository.sendInitialAssessment(result);
 
-      emit(AssessmentCreatingPath());
+      emit(
+        AssessmentProgress(
+          assessmentSent: true,
+          pathCreated: false,
+          modulesCreated: 0,
+          totalModules: 0,
+        ),
+      );
+
       final pathData = await repository.createLearningPath();
 
+      emit(
+        AssessmentProgress(
+          assessmentSent: true,
+          pathCreated: true,
+          modulesCreated: 0,
+          totalModules: pathData['modules'].length,
+        ),
+      );
+
       final moduleIds = (pathData['modules'] as List)
-          .map<int>((m) => m['id'] as int)
+          .map<int>((m) => m['id'])
           .toList();
 
-      print('Module IDs: $moduleIds');
-
-      // Proceso uno por uno con feedback
       for (int i = 0; i < moduleIds.length; i++) {
-        emit(
-          AssessmentCreatingModules(current: i + 1, total: moduleIds.length),
-        );
         await repository.createLearningModules([moduleIds[i]]);
+        emit(
+          AssessmentProgress(
+            assessmentSent: true,
+            pathCreated: true,
+            modulesCreated: i + 1,
+            totalModules: moduleIds.length,
+          ),
+        );
       }
 
       emit(AssessmentSuccess());
