@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
+import 'package:mobile_app/features/initial_assesstment/presentation/cubit/initial_assestment_cubit.dart';
+import 'package:mobile_app/features/initial_assesstment/repositories/initial_assestment_repository.dart';
+import 'package:mobile_app/features/initial_assesstment/services/initial_assestment_service.dart';
 import 'package:mobile_app/features/learning_path/presentation/cubit/learning_path_cubit.dart';
+import 'package:mobile_app/features/learning_path/presentation/cubit/module_detail_cubit.dart';
+import 'package:mobile_app/features/learning_path/presentation/screens/loading_module_screen.dart';
 import 'package:mobile_app/features/learning_path/presentation/screens/module_detail_screen.dart';
 import 'package:mobile_app/features/learning_path/presentation/widgets/module_card.dart';
+import 'package:mobile_app/features/learning_path/repositories/learning_path_repository.dart';
+import 'package:mobile_app/features/learning_path/services/learning_path_service.dart';
 
 class LearningPathScreen extends StatelessWidget {
   const LearningPathScreen({super.key});
@@ -53,15 +60,46 @@ class LearningPathScreen extends StatelessWidget {
               itemBuilder: (_, index) {
                 final module = modules[index];
                 return GestureDetector(
-                  onTap: () {
-                    print('Module ID: ${module.id}');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            ModuleDetailScreen(moduleId: module.id!),
-                      ),
-                    );
+                  onTap: () async {
+                    final service = LearningPathService();
+                    final repository = LearningPathRepository(service);
+                    final moduleDetailCubit = ModuleDetailCubit(repository);
+
+                    await moduleDetailCubit.loadModuleDetail(module.id!);
+                    final detail = moduleDetailCubit.state.data;
+
+                    if (detail != null && detail.pages.isNotEmpty) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                            value: moduleDetailCubit,
+                            child: ModuleDetailScreen(moduleId: module.id!),
+                          ),
+                        ),
+                      );
+                    } else {
+                      final assessmentService = AssessmentService();
+                      final assessmentRepo = AssessmentRepository(
+                        service: assessmentService,
+                      );
+                      final assessmentCubit = AssessmentCubit(
+                        repository: assessmentRepo,
+                      );
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(value: moduleDetailCubit),
+                              BlocProvider(create: (_) => assessmentCubit),
+                            ],
+                            child: ModuleLoadingScreen(moduleId: module.id!),
+                          ),
+                        ),
+                      );
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(

@@ -62,4 +62,15 @@ class AssessmentCubit extends Cubit<AssessmentState> {
       emit(AssessmentError(e.toString()));
     }
   }
+
+  Future<void> generateContentForModule(int moduleId) async {
+    try {
+      emit(AssessmentCreatingModules(current: 0, total: 1));
+      await repository.createLearningModule(moduleId);
+      emit(AssessmentCreatingModules(current: 1, total: 1));
+      emit(AssessmentSuccess());
+    } catch (e) {
+      emit(AssessmentError(e.toString()));
+    }
+  }
 }

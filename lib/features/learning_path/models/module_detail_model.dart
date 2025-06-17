@@ -18,7 +18,11 @@ class ModuleDetailModel {
   });
 
   factory ModuleDetailModel.fromJson(Map<String, dynamic> json) {
-    var pagesJson = json['content']['pages'] as List<dynamic>? ?? [];
+    final content = json['content'] as Map<String, dynamic>?;
+
+    final pagesJson = content != null && content['pages'] != null
+        ? content['pages'] as List<dynamic>
+        : [];
 
     return ModuleDetailModel(
       id: json['id'],

@@ -15,13 +15,15 @@ class ModuleDetailCubit extends Cubit<ModuleDetailState> {
 
   ModuleDetailCubit(this._repository) : super(ModuleDetailState());
 
-  Future<void> loadModuleDetail(int moduleId) async {
+  Future<ModuleDetailModel> loadModuleDetail(int moduleId) async {
     emit(ModuleDetailState(loading: true));
     try {
       final moduleDetail = await _repository.getModuleDetail(moduleId);
       emit(ModuleDetailState(data: moduleDetail));
+      return moduleDetail;
     } catch (e) {
       emit(ModuleDetailState(error: e.toString()));
+      throw Exception(e.toString());
     }
   }
 }
