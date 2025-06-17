@@ -10,7 +10,12 @@ class AssessmentSuccess extends AssessmentState {}
 
 class AssessmentCreatingPath extends AssessmentState {}
 
-class AssessmentCreatingModules extends AssessmentState {}
+class AssessmentCreatingModules extends AssessmentState {
+  final int current;
+  final int total;
+
+  AssessmentCreatingModules({required this.current, required this.total});
+}
 
 class AssessmentError extends AssessmentState {
   final String message;

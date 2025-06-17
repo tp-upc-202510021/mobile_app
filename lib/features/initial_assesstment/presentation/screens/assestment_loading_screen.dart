@@ -64,13 +64,13 @@ class _AssessmentLoadingScreenState extends State<AssessmentLoadingScreen> {
 
   String _getLoadingText(AssessmentState state) {
     if (state is AssessmentLoading) {
-      return 'Enviando tu evaluación inicial...\nEsto puede tomar unos segundos.';
+      return 'Enviando tu evaluación inicial...';
     } else if (state is AssessmentCreatingPath) {
-      return 'Creando tu ruta de aprendizaje personalizada... 🚀';
+      return 'Creando ruta de aprendizaje personalizada... 🛠️';
     } else if (state is AssessmentCreatingModules) {
-      return 'Creando módulos de aprendizaje... 📚';
+      return 'Creando módulos de aprendizaje... 📚 ${state.current} de ${state.total}';
     } else if (state is AssessmentError) {
-      return 'Ocurrió un error al enviar la evaluación.';
+      return 'Ocurrió un error al procesar tu evaluación.';
     } else {
       return 'Preparando tu evaluación...';
     }

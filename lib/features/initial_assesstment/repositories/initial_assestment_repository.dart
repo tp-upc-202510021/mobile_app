@@ -9,4 +9,12 @@ class AssessmentRepository {
   Future<void> sendInitialAssessment(InitialAssessmentResult result) {
     return service.submitInitialAssessment(result);
   }
+
+  Future<Map<String, dynamic>> createLearningPath() async {
+    return await service.createLearningPath();
+  }
+
+  Future<void> createLearningModules(List<int> moduleIds) async {
+    await service.createLearningModules(moduleIds);
+  }
 }

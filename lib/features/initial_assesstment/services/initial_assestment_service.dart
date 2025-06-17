@@ -20,11 +20,6 @@ class AssessmentService {
         throw Exception('Token no encontrado. Inicia sesión nuevamente.');
       }
 
-      print('[AssessmentService] Token encontrado (length: ${token.length})');
-      if (token.length > 100) {
-        print('[AssessmentService] ⚠️ El token tiene más de 100 caracteres.');
-      }
-
       final url = Uri.parse('$baseUrl/diagnostics/');
       print('[AssessmentService] Enviando POST a $url');
       print('[AssessmentService] Payload: ${jsonEncode(result.toJson())}');
@@ -47,6 +42,64 @@ class AssessmentService {
     } catch (e) {
       print('[AssessmentService] Excepción capturada: $e');
       rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> createLearningPath() async {
+    final token = await _storage.read(key: 'access_token');
+    if (token == null || token.isEmpty) {
+      throw Exception('Token no encontrado. Inicia sesión nuevamente.');
+    }
+
+    final url = Uri.parse('$baseUrl/learningpaths/create/');
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    print('[AssessmentService] createLearningPath response: ${response.body}');
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception(
+        'Error al crear la ruta de aprendizaje: ${response.body}',
+      );
+    }
+
+    return jsonDecode(response.body);
+  }
+
+  Future<void> createLearningModules(List<int> moduleIds) async {
+    final token = await _storage.read(key: 'access_token');
+    if (token == null || token.isEmpty) {
+      throw Exception('Token no encontrado. Inicia sesión nuevamente.');
+    }
+
+    final url = Uri.parse('$baseUrl/learningmodules/generate-content/');
+
+    for (final moduleId in moduleIds) {
+      print(
+        '[AssessmentService] Generando contenido para módulo ID: $moduleId',
+      );
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'module_id': moduleId}),
+      );
+
+      print('[AssessmentService] Respuesta módulo $moduleId: ${response.body}');
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception(
+          'Error al generar contenido del módulo $moduleId: ${response.body}',
+        );
+      }
     }
   }
 }

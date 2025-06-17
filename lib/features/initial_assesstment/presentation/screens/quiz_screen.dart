@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:mobile_app/features/initial_assesstment/models/initial_assestment_model.dart';
+
 import 'package:mobile_app/features/initial_assesstment/presentation/cubit/initial_assestment_cubit.dart';
 import 'package:mobile_app/features/initial_assesstment/presentation/screens/assestment_loading_screen.dart';
 import 'package:mobile_app/features/initial_assesstment/repositories/initial_assestment_repository.dart';
+
 import 'package:mobile_app/features/initial_assesstment/services/initial_assestment_service.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -68,7 +70,6 @@ class _QuizScreenState extends State<QuizScreen> {
     final selectedModules =
         question['answers'][selectedAnswer]['assigned_modules'];
 
-    // Agregar módulos al resultado acumulado
     widget.result.addModules(selectedModules);
 
     if (currentQuestionIndex < questions.length - 1) {
@@ -77,17 +78,6 @@ class _QuizScreenState extends State<QuizScreen> {
         selectedAnswer = null;
       });
     } else {
-      // Evaluación completada: imprimir el resultado o enviarlo
-      //debugPrint('Resultado completo: ${jsonEncode(resultJson)}');
-
-      // Aquí podrías hacer un POST al backend con resultJson...
-
-      // Navegación final
-      // context.read<AuthCubit>().checkAuthStatus();
-      // Navigator.of(context).pushReplacement(
-      //   MaterialPageRoute(builder: (context) => const AppRoot()),
-      // );
-
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -100,6 +90,37 @@ class _QuizScreenState extends State<QuizScreen> {
         ),
       );
     }
+  }
+
+  Widget _buildProgressIndicators() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(questions.length, (index) {
+        final isCurrent = index == currentQuestionIndex;
+        final isCompleted = index < currentQuestionIndex;
+
+        Color color;
+        if (isCurrent) {
+          color = Colors.blueAccent;
+        } else if (isCompleted) {
+          color = Colors.green;
+        } else {
+          color = Colors.grey.shade300;
+        }
+
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.black12),
+          ),
+        );
+      }),
+    );
   }
 
   @override
@@ -122,7 +143,10 @@ class _QuizScreenState extends State<QuizScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
+            _buildProgressIndicators(),
+            const SizedBox(height: 24),
             Text(
               question['question_text'],
               style: const TextStyle(fontSize: 20),
