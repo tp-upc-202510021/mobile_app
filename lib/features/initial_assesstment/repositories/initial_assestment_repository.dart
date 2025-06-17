@@ -14,7 +14,7 @@ class AssessmentRepository {
     return await service.createLearningPath();
   }
 
-  Future<void> createLearningModule(int moduleIds) async {
-    await service.createLearningModule(moduleIds);
+  Future<void> createLearningModule(int moduleId) async {
+    await service.createLearningModule(moduleId);
   }
 }
