@@ -4,8 +4,14 @@ import 'package:forui/forui.dart';
 class ModuleCard extends StatelessWidget {
   final String title;
   final String level;
+  final bool isBlocked;
 
-  const ModuleCard({super.key, required this.title, required this.level});
+  const ModuleCard({
+    super.key,
+    required this.title,
+    required this.level,
+    required this.isBlocked,
+  });
 
   @override
   Widget build(BuildContext context) {

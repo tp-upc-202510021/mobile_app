@@ -10,6 +10,8 @@ import 'package:mobile_app/features/initial_assesstment/presentation/screens/ass
 import 'package:mobile_app/features/initial_assesstment/repositories/initial_assestment_repository.dart';
 
 import 'package:mobile_app/features/initial_assesstment/services/initial_assestment_service.dart';
+import 'package:mobile_app/features/quiz/data/quiz_repository.dart';
+import 'package:mobile_app/features/quiz/data/quiz_service.dart';
 
 class InitialQuizScreen extends StatefulWidget {
   final String preference;
@@ -88,6 +90,7 @@ class _InitialQuizScreenState extends State<InitialQuizScreen> {
           builder: (_) => BlocProvider(
             create: (_) => AssessmentCubit(
               repository: AssessmentRepository(service: AssessmentService()),
+              quizRepository: QuizRepository(QuizService()),
             ),
             child: AssessmentLoadingScreen(result: widget.result),
           ),

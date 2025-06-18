@@ -11,6 +11,8 @@ import 'package:mobile_app/features/learning_path/presentation/screens/module_de
 import 'package:mobile_app/features/learning_path/presentation/widgets/module_card.dart';
 import 'package:mobile_app/features/learning_path/repositories/learning_path_repository.dart';
 import 'package:mobile_app/features/learning_path/services/learning_path_service.dart';
+import 'package:mobile_app/features/quiz/data/quiz_repository.dart';
+import 'package:mobile_app/features/quiz/data/quiz_service.dart';
 
 class LearningPathScreen extends StatelessWidget {
   const LearningPathScreen({super.key});
@@ -79,12 +81,15 @@ class LearningPathScreen extends StatelessWidget {
                         ),
                       );
                     } else {
+                      final quizService = QuizService();
+                      final quizRepository = QuizRepository(quizService);
                       final assessmentService = AssessmentService();
                       final assessmentRepo = AssessmentRepository(
                         service: assessmentService,
                       );
                       final assessmentCubit = AssessmentCubit(
                         repository: assessmentRepo,
+                        quizRepository: quizRepository,
                       );
 
                       Navigator.push(
@@ -109,6 +114,7 @@ class LearningPathScreen extends StatelessWidget {
                     child: ModuleCard(
                       title: module.title,
                       level: module.level.toString(),
+                      isBlocked: module.isBlocked,
                     ),
                   ),
                 );

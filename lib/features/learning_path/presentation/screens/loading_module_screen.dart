@@ -61,7 +61,7 @@ class _ModuleLoadingScreenState extends State<ModuleLoadingScreen> {
                     const Text('🚀', style: TextStyle(fontSize: 64)),
                     const SizedBox(height: 20),
                     const Text(
-                      'Estamos creando tu módulo personalizado...',
+                      'Estamos creando tu contenido personalizado...',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20,
@@ -69,7 +69,7 @@ class _ModuleLoadingScreenState extends State<ModuleLoadingScreen> {
                         color: Color(0xFF3A3A3A),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     const Text(
                       'Esto solo tomará unos segundos. 🎯',
                       textAlign: TextAlign.center,
@@ -84,6 +84,7 @@ class _ModuleLoadingScreenState extends State<ModuleLoadingScreen> {
                         color: Color(0xFF666666),
                       ),
                     ),
+                    const SizedBox(height: 20),
                     const SizedBox(height: 30),
                     const CircularProgressIndicator(
                       strokeWidth: 3,

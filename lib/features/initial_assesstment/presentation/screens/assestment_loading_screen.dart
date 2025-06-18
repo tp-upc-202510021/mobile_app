@@ -63,7 +63,7 @@ class _AssessmentLoadingScreenState extends State<AssessmentLoadingScreen> {
               return ConstrainedBox(
                 constraints: const BoxConstraints(
                   maxWidth: 400,
-                  maxHeight: 260,
+                  maxHeight: 290,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(24),
@@ -89,6 +89,11 @@ class _AssessmentLoadingScreenState extends State<AssessmentLoadingScreen> {
                               ? state.modulesCreated == state.totalModules
                               : true,
                           label: 'Creando tu primer módulo...',
+                        ),
+                        const SizedBox(height: 12),
+                        _buildStep(
+                          done: isProgress ? state.quizCreated : true,
+                          label: 'Creando quiz del modulo...',
                         ),
                         const SizedBox(height: 12),
                         if (isSuccess)

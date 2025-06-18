@@ -4,6 +4,10 @@ import 'package:mobile_app/features/learning_path/presentation/cubit/module_deta
 import 'package:mobile_app/features/learning_path/repositories/learning_path_repository.dart';
 import 'package:mobile_app/features/learning_path/services/learning_path_service.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:mobile_app/features/quiz/data/quiz_repository.dart';
+import 'package:mobile_app/features/quiz/data/quiz_service.dart';
+import 'package:mobile_app/features/quiz/presentation/quiz_cubit.dart';
+import 'package:mobile_app/features/quiz/presentation/screens/quiz_screen.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ModuleDetailScreen extends StatefulWidget {
@@ -245,16 +249,32 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                               onPressed: _prevPage,
                               child: const Text('Anterior'),
                             ),
-                            ElevatedButton(
-                              onPressed: _currentPage < totalPages - 1
-                                  ? () => _nextPage(totalPages)
-                                  : null,
-                              child: Text(
-                                _currentPage == totalPages - 1
-                                    ? 'Finalizado'
-                                    : 'Siguiente',
-                              ),
-                            ),
+                            _currentPage == totalPages - 1
+                                ? ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => BlocProvider(
+                                            create: (_) =>
+                                                QuizCubit(
+                                                  QuizRepository(QuizService()),
+                                                )..loadQuiz(
+                                                  widget.moduleId,
+                                                ), // <== AQUÍ se carga el quiz
+                                            child: QuizScreen(
+                                              moduleId: widget.moduleId,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text('Ir al Quiz'),
+                                  )
+                                : ElevatedButton(
+                                    onPressed: () => _nextPage(totalPages),
+                                    child: const Text('Siguiente'),
+                                  ),
                           ],
                         );
                       },
