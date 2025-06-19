@@ -19,15 +19,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   final List<int> _tabHistory = [0];
 
-  final _navigatorKeys = List.generate(3, (_) => GlobalKey<NavigatorState>());
+  final _navigatorKeys = List.generate(2, (_) => GlobalKey<NavigatorState>());
 
   late final List<Widget> _tabs = [
     _buildTabNavigator(_navigatorKeys[0], const HomeScreen()),
-    _buildTabNavigator(
-      _navigatorKeys[1],
-      const _DummyScreen(title: '🔍 Search'),
-    ),
-    _buildTabNavigator(_navigatorKeys[2], const ProfileScreen()),
+
+    _buildTabNavigator(_navigatorKeys[1], const ProfileScreen()),
   ];
 
   static Widget _buildTabNavigator(
@@ -106,16 +103,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 itemIndex: 0,
                 currentIndex: _currentIndex,
               ),
-              buildNavItem(
-                iconData: FIcons.search,
-                label: 'Buscar',
-                itemIndex: 1,
-                currentIndex: _currentIndex,
-              ),
+
               buildNavItem(
                 iconData: FIcons.user,
                 label: 'Perfil',
-                itemIndex: 2,
+                itemIndex: 1,
                 currentIndex: _currentIndex,
               ),
             ],

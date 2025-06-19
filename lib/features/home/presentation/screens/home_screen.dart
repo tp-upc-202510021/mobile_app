@@ -15,88 +15,178 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FScaffold(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _HomeOption(
-            icon: FIcons.graduationCap,
-            label: 'Ruta de aprendizaje',
-            onTap: () {
-              // Aquí puedes navegar a la pantalla de Ruta de Aprendizaje
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => BlocProvider(
-                    create: (_) => LearningPathCubit(
-                      LearningPathRepository(LearningPathService()),
-                    )..loadLearningPath(),
-                    child: const LearningPathScreen(),
+    return Scaffold(
+      body: Container(
+        // decoration: const BoxDecoration(
+        //   gradient: LinearGradient(
+        //     colors: [Color(0xFFEEF2F3), Color(0xFFEEF2F3), Color(0xFF8EC5FC)],
+        //     begin: Alignment.topLeft,
+        //     end: Alignment.bottomRight,
+        //   ),
+        // ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '¡Bienvenido!',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
                   ),
                 ),
-              );
-              print('Ir a Ruta de aprendizaje');
-            },
-          ),
-          const SizedBox(height: 20),
-          _HomeOption(
-            icon: FIcons.gamepad2,
-            label: 'Minijuego',
-            onTap: () {
-              print('Ir a Minijuego');
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => BlocProvider(
-                    create: (_) => GameCubit(GameRepository(GameService())),
-                    child: const GameEntryScreen(),
-                  ),
+                const SizedBox(height: 8),
+                const Text(
+                  '¿Qué deseas hacer hoy?',
+                  style: TextStyle(fontSize: 18, color: Colors.black54),
                 ),
-              );
-            },
+                const SizedBox(height: 40),
+                _AnimatedHomeOption(
+                  icon: FIcons.graduationCap,
+                  label: 'Explorar Ruta de Aprendizaje',
+                  subtitle: 'Avanza paso a paso en tu camino financiero',
+                  color: Colors.deepPurpleAccent,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider(
+                          create: (_) => LearningPathCubit(
+                            LearningPathRepository(LearningPathService()),
+                          )..loadLearningPath(),
+                          child: const LearningPathScreen(),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+                _AnimatedHomeOption(
+                  icon: FIcons.gamepad2,
+                  label: 'Jugar Minijuego',
+                  subtitle: 'Pon a prueba tus conocimientos con diversión',
+                  color: Colors.orangeAccent,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider(
+                          create: (_) =>
+                              GameCubit(GameRepository(GameService())),
+                          child: const GameEntryScreen(),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 20),
-        ],
+        ),
       ),
     );
   }
 }
 
-class _HomeOption extends StatelessWidget {
+class _AnimatedHomeOption extends StatefulWidget {
   final IconData icon;
   final String label;
+  final String subtitle;
   final VoidCallback onTap;
+  final Color color;
 
-  const _HomeOption({
+  const _AnimatedHomeOption({
     required this.icon,
     required this.label,
+    required this.subtitle,
     required this.onTap,
+    required this.color,
   });
 
   @override
+  State<_AnimatedHomeOption> createState() => _AnimatedHomeOptionState();
+}
+
+class _AnimatedHomeOptionState extends State<_AnimatedHomeOption>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _scaleAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutBack,
+    );
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 6,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-        child: Row(
-          children: [
-            Icon(icon, size: 40, color: Colors.blueAccent),
-            const SizedBox(width: 16),
-            Expanded(child: Text(label, style: const TextStyle(fontSize: 18))),
-            const Icon(Icons.arrow_forward_ios),
-          ],
+    return ScaleTransition(
+      scale: _scaleAnimation,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: widget.color.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: widget.color.withOpacity(0.1),
+                radius: 30,
+                child: Icon(widget.icon, size: 30, color: widget.color),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.label,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      widget.subtitle,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.arrow_forward_ios, size: 16),
+            ],
+          ),
         ),
       ),
     );
