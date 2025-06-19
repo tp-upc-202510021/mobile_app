@@ -41,6 +41,7 @@ dependencies:
   markdown_widget: ^2.3.2+8
   youtube_player_flutter: ^9.1.1
   lottie: ^3.3.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:

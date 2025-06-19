@@ -112,7 +112,7 @@ class ProfileScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 1),
                         IconButton(
                           icon: const Icon(FIcons.copy, size: 20),
                           tooltip: 'Copiar ID',

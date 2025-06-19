@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
+import 'package:mobile_app/features/game/data/game_repository.dart';
+import 'package:mobile_app/features/game/data/game_service.dart';
+import 'package:mobile_app/features/game/presentation/game_cubit.dart';
+import 'package:mobile_app/features/game/presentation/screens/game_entry_screen.dart';
 import 'package:mobile_app/features/learning_path/presentation/cubit/learning_path_cubit.dart';
 import 'package:mobile_app/features/learning_path/presentation/screens/learning_path_screen.dart';
 import 'package:mobile_app/features/learning_path/repositories/learning_path_repository.dart';
@@ -40,16 +44,18 @@ class HomeScreen extends StatelessWidget {
             label: 'Minijuego',
             onTap: () {
               print('Ir a Minijuego');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider(
+                    create: (_) => GameCubit(GameRepository(GameService())),
+                    child: const GameEntryScreen(),
+                  ),
+                ),
+              );
             },
           ),
           const SizedBox(height: 20),
-          _HomeOption(
-            icon: FIcons.bookCheck,
-            label: 'Quizz',
-            onTap: () {
-              print('Ir a Quiz');
-            },
-          ),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/forui.dart';
 import 'package:mobile_app/features/friends/data/friend_model.dart';
 import 'package:mobile_app/features/friends/data/friend_request_model.dart';
 import 'package:mobile_app/features/friends/friend_cubit.dart';
@@ -35,6 +36,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.theme.colors;
     return Scaffold(
       appBar: AppBar(title: const Text("Amigos"), centerTitle: true),
 
@@ -78,15 +80,11 @@ class _FriendsScreenState extends State<FriendsScreen> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    ElevatedButton(
-                      onPressed: _sendRequest,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[300],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: const Text("Enviar "),
+                    FButton(
+                      onPress: () {
+                        _sendRequest();
+                      },
+                      child: const Text('Enviar'),
                     ),
                   ],
                 ),
@@ -164,7 +162,6 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         child: Text(friend.username[0].toUpperCase()),
                       ),
                       title: Text(friend.username),
-                      subtitle: Text(friend.email),
                     ),
                   ),
                 ),
