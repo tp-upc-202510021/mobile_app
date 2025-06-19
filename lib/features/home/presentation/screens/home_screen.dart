@@ -30,6 +30,7 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Spacer(),
                 const Text(
                   '¡Bienvenido!',
                   style: TextStyle(
@@ -38,6 +39,7 @@ class HomeScreen extends StatelessWidget {
                     color: Colors.black87,
                   ),
                 ),
+
                 const SizedBox(height: 8),
                 const Text(
                   '¿Qué deseas hacer hoy?',
@@ -82,6 +84,7 @@ class HomeScreen extends StatelessWidget {
                     );
                   },
                 ),
+                Spacer(),
               ],
             ),
           ),
