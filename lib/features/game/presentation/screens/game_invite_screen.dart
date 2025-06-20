@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/features/friends/friend_cubit.dart';
 import 'package:mobile_app/features/friends/friend_state.dart';
 import 'package:mobile_app/features/game/presentation/game_cubit.dart';
+import 'package:mobile_app/main.dart';
 import 'package:mobile_app/shared/notification_service.dart';
 
 class InviteFriendScreen extends StatefulWidget {
@@ -69,6 +70,18 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                                   NotificationService.show(
                                     title: '✅ Exito',
                                     body: "Invitación enviada",
+                                  );
+                                  Future.delayed(
+                                    const Duration(seconds: 5),
+                                    () {
+                                      final context =
+                                          navigatorKey.currentContext;
+                                      if (context != null) {
+                                        NotificationService.showLoadingToast(
+                                          context,
+                                        );
+                                      }
+                                    },
                                   );
                                 } catch (e) {
                                   NotificationService.show(

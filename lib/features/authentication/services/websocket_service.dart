@@ -61,13 +61,15 @@ class WebSocketService {
       if (context == null) return;
 
       if (data['type'] == 'game.accepted' || data['type'] == 'game.started') {
+        NotificationService.dismissLoadingToast();
         final gameData = GameData.fromJson(data['game_data']);
         final sessionId = data['session_id'];
 
         NotificationService.show(
-          title: 'Juego Aceptado 🎉',
-          body: data['message'] ?? 'Tu invitación fue aceptada.',
+          title: '¡El juego ya comenzó! 🚀',
+          body: data['message'] ?? 'El juego ha empezado. Únete ahora.',
           showButton: true,
+          durationSeconds: 10,
           onPressed: () {
             Navigator.push(
               context,
@@ -115,7 +117,10 @@ class WebSocketService {
                     child: const Text('Rechazar'),
                   ),
                   TextButton(
-                    onPressed: () => Navigator.pop(context, 'accept'),
+                    onPressed: () => {
+                      Navigator.pop(context, 'accept'),
+                      NotificationService.showLoadingToast(context),
+                    },
                     child: const Text('Aceptar'),
                   ),
                 ],
@@ -125,7 +130,7 @@ class WebSocketService {
             if (choice == null) return;
 
             try {
-              // 🚀 Aquí TÚ haces la llamada activa al API
+              // la llamada activa al API
               await GameRepository(GameService()).respondToInvitation(
                 sessionId: sessionId,
                 response: choice, // "accept" o "reject"
@@ -137,6 +142,7 @@ class WebSocketService {
                   const SnackBar(content: Text('Invitación aceptada.')),
                 );
               } else {
+                NotificationService.dismissLoadingToast();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Has rechazado la invitación.')),
                 );
@@ -147,6 +153,16 @@ class WebSocketService {
               ).showSnackBar(SnackBar(content: Text('Error al responder: $e')));
             }
           },
+        );
+        return;
+      }
+
+      if (data['type'] == 'game.rejected') {
+        NotificationService.dismissLoadingToast();
+        NotificationService.show(
+          title: 'Notificación',
+          body: data['message'] ?? message,
+          showButton: false,
         );
         return;
       }
