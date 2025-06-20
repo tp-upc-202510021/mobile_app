@@ -5,6 +5,7 @@ class ModuleModel {
   final String level;
   final int orderIndex;
   final bool isBlocked;
+  final bool isApproved;
 
   ModuleModel({
     required this.id,
@@ -13,6 +14,7 @@ class ModuleModel {
     required this.level,
     required this.orderIndex,
     required this.isBlocked,
+    required this.isApproved,
   });
 
   factory ModuleModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class ModuleModel {
       level: json['level'],
       orderIndex: json['order_index'],
       isBlocked: json['is_blocked'],
+      isApproved: json['is_approved'] ?? false,
     );
   }
 }

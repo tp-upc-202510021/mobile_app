@@ -4,6 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 
 import 'package:mobile_app/features/authentication/presentation/cubit/auth_cubit.dart';
+import 'package:mobile_app/features/badge/data/badge_repository.dart';
+import 'package:mobile_app/features/badge/data/badge_service.dart';
+import 'package:mobile_app/features/badge/presentation/badge_cubit.dart';
+import 'package:mobile_app/features/badge/presentation/screens/badges_profile_screen.dart';
 import 'package:mobile_app/features/friends/data/friend_repository.dart';
 import 'package:mobile_app/features/friends/data/friend_service.dart';
 import 'package:mobile_app/features/friends/screens/friend_screen.dart';
@@ -148,27 +152,52 @@ class ProfileScreen extends StatelessWidget {
 
                     // Navegación dentro de un marco gris
                     Container(
-                      height: 200,
-                      padding: const EdgeInsets.all(12),
+                      height: 230,
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border: Border.all(color: Color(0xFFDDDDDD)),
-                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFDDDDDD)),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           FButton(
+                            style: FButtonStyle.secondary,
+                            prefix: Icon(FIcons.settings),
                             onPress: () => print('Ir a Opciones'),
                             child: const _NavItem(title: 'Opciones'),
                           ),
                           const SizedBox(height: 15),
                           FButton(
-                            onPress: () => print('Ir a Logros'),
+                            style: FButtonStyle.secondary,
+                            prefix: Icon(FIcons.trophy),
+                            onPress: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (_) => BadgeCubit(
+                                      BadgeRepository(BadgeService()),
+                                    )..loadUserBadges(),
+                                    child: const BadgeScreen(),
+                                  ),
+                                ),
+                              );
+                            },
                             child: const _NavItem(title: 'Logros'),
                           ),
                           const SizedBox(height: 15),
                           FButton(
+                            style: FButtonStyle.secondary,
+                            prefix: Icon(FIcons.users),
                             onPress: () {
                               Navigator.push(
                                 context,
@@ -272,7 +301,7 @@ class _NavItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(title, style: const TextStyle(fontSize: 16)),
-        const SizedBox(width: 8),
+        const SizedBox(width: 10),
         const Icon(Icons.arrow_forward_ios, size: 16),
       ],
     );
