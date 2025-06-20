@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
+import 'package:mobile_app/features/authentication/presentation/cubit/auth_cubit.dart';
 import 'package:mobile_app/features/game/data/game_repository.dart';
 import 'package:mobile_app/features/game/data/game_service.dart';
 import 'package:mobile_app/features/game/presentation/game_cubit.dart';
 import 'package:mobile_app/features/game/presentation/screens/game_entry_screen.dart';
+import 'package:mobile_app/features/game/presentation/screens/game_invite_screen.dart';
+import 'package:mobile_app/features/game/presentation/screens/game_menu_screen.dart';
 import 'package:mobile_app/features/learning_path/presentation/cubit/learning_path_cubit.dart';
 import 'package:mobile_app/features/learning_path/presentation/screens/learning_path_screen.dart';
 import 'package:mobile_app/features/learning_path/repositories/learning_path_repository.dart';
@@ -52,6 +55,7 @@ class HomeScreen extends StatelessWidget {
                   subtitle: 'Avanza paso a paso en tu camino financiero',
                   color: Colors.deepPurpleAccent,
                   onTap: () {
+                    context.read<AuthCubit>().webSocketService.simulateToast();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -74,13 +78,7 @@ class HomeScreen extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider(
-                          create: (_) =>
-                              GameCubit(GameRepository(GameService())),
-                          child: const GameEntryScreen(),
-                        ),
-                      ),
+                      MaterialPageRoute(builder: (_) => const GameMenuScreen()),
                     );
                   },
                 ),

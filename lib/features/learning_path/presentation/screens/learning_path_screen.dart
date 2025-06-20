@@ -115,7 +115,7 @@ class LearningPathScreen extends StatelessWidget {
                       title: module.title,
                       level: module.level.toString(),
                       isBlocked: module.isBlocked,
-                      isApproved: module.isApproved ?? false,
+                      isApproved: module.isApproved,
                     ),
                   ),
                 );

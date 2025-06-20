@@ -15,6 +15,7 @@ class AuthRepository {
     // Guardar tokens
     await _storage.write(key: 'access_token', value: data['access']);
     await _storage.write(key: 'refresh_token', value: data['refresh']);
+    await _storage.write(key: 'user_id', value: user.id.toString());
 
     return user;
   }
@@ -58,6 +59,10 @@ class AuthRepository {
 
   Future<String?> getRefreshToken() async {
     return await _storage.read(key: 'refresh_token');
+  }
+
+  Future<String?> getUserId() async {
+    return await _storage.read(key: 'user_id');
   }
 
   Future<void> printStoredTokens() async {

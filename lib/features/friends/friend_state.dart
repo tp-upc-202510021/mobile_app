@@ -7,6 +7,11 @@ class FriendInitial extends FriendState {}
 
 class FriendLoading extends FriendState {}
 
+class FriendOnlyLoaded extends FriendState {
+  final List<Friend> friends;
+  FriendOnlyLoaded({required this.friends});
+}
+
 class FriendLoaded extends FriendState {
   final List<Friend> friends;
   final List<FriendRequest> pendingRequests;

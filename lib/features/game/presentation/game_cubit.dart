@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_app/features/authentication/services/websocket_service.dart';
 import 'package:mobile_app/features/game/data/game_data_model.dart';
 import 'package:mobile_app/features/game/data/game_repository.dart';
 import 'package:mobile_app/features/game/data/rate_event_model.dart';
@@ -12,6 +15,12 @@ class GameLoading extends GameState {}
 class GameLoaded extends GameState {
   final GameData game;
   GameLoaded(this.game);
+}
+
+class GameInvitationResponded extends GameState {
+  final String response;
+  final int sessionId;
+  GameInvitationResponded({required this.response, required this.sessionId});
 }
 
 class GameError extends GameState {
@@ -37,6 +46,7 @@ class RateEventError extends GameState {
 
 class GameCubit extends Cubit<GameState> {
   final GameRepository repository;
+
   GameCubit(this.repository) : super(GameInitial());
 
   Future<void> loadGame() async {
@@ -50,6 +60,41 @@ class GameCubit extends Cubit<GameState> {
       emit(GameLoaded(game));
     } catch (e) {
       emit(GameError('Error al cargar el juego: $e'));
+    }
+  }
+
+  Future<void> inviteToGame(int invitedUserId) async {
+    final response = await repository.inviteToGame(invitedUserId);
+    final message = response['message'];
+    final sessionId = response['session_id'];
+
+    final messageData = jsonEncode({
+      "title": "Invitación enviada",
+      "body": message,
+      "show_button": true,
+      "button_text": "Ir a sala",
+    });
+
+    print('📨 $message | 🆔 sessionId: $sessionId');
+
+    // Aquí podrías navegar, mostrar un toast, etc.
+  }
+
+  Future<void> respondToInvitation(int sessionId, String response) async {
+    try {
+      emit(GameLoading());
+      final result = await repository.respondToInvitation(
+        sessionId: sessionId,
+        response: response,
+      );
+      emit(
+        GameInvitationResponded(
+          response: result.response,
+          sessionId: result.sessionId,
+        ),
+      );
+    } catch (e) {
+      emit(GameError(e.toString()));
     }
   }
 }

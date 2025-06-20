@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobile_app/config/api_config.dart';
 import 'package:mobile_app/features/game/data/game_data_model.dart';
+import 'package:mobile_app/features/game/data/game_invitation_response_model.dart';
 import 'package:mobile_app/features/game/data/rate_event_model.dart';
 
 class GameService {
@@ -44,6 +45,49 @@ class GameService {
       return RateEventResponse.fromJson(json);
     } else {
       throw Exception('Error ${response.statusCode}: ${response.body}');
+    }
+  }
+
+  Future<Map<String, dynamic>> inviteToGame(int invitedUserId) async {
+    final token = await _storage.read(key: 'access_token');
+    final url = Uri.parse('${ApiConfig.baseUrl}/game/invite-to-game/');
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({"invited_user_id": invitedUserId}),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Error ${response.statusCode}: ${response.body}');
+    }
+  }
+
+  Future<GameInvitationResponse> respondToInvitation({
+    required int sessionId,
+    required String response, // "accept" or "reject"
+  }) async {
+    final token = await _storage.read(key: 'access_token');
+    final url = Uri.parse('${ApiConfig.baseUrl}/game/respond-to-invitation/');
+
+    final res = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({"session_id": sessionId, "response": response}),
+    );
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return GameInvitationResponse.fromJson(jsonDecode(res.body));
+    } else {
+      throw Exception('Error ${res.statusCode}: ${res.body}');
     }
   }
 }

@@ -19,6 +19,16 @@ class FriendCubit extends Cubit<FriendState> {
     }
   }
 
+  Future<void> loadFriends() async {
+    emit(FriendLoading());
+    try {
+      final friends = await repository.getFriends();
+      emit(FriendOnlyLoaded(friends: friends));
+    } catch (e) {
+      emit(FriendError(e.toString()));
+    }
+  }
+
   Future<void> sendRequest(int receiverId) async {
     try {
       await repository.sendFriendRequest(receiverId);

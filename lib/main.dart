@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:mobile_app/app/app_root.dart';
+import 'package:mobile_app/features/authentication/services/websocket_service.dart';
 
 import 'features/authentication/presentation/cubit/auth_cubit.dart';
 import 'features/authentication/repositories/auth_repository.dart';
 import 'features/authentication/services/auth_service.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() {
   final authService = AuthService();
   final authRepo = AuthRepository(authService);
-
+  final webSocketService = WebSocketService();
   runApp(
     MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => AuthCubit(authRepo))],
+      providers: [
+        BlocProvider(create: (_) => AuthCubit(authRepo, webSocketService)),
+      ],
       child: const Application(),
     ),
   );
@@ -27,12 +32,21 @@ class Application extends StatelessWidget {
     final theme = FThemes.zinc.light;
 
     return MaterialApp(
+      navigatorKey: navigatorKey,
       localizationsDelegates: FLocalizations.localizationsDelegates,
       supportedLocales: FLocalizations.supportedLocales,
-      builder: (_, child) => FTheme(data: theme, child: child!),
       theme: theme.toApproximateMaterialTheme(),
-      home:
-          const AppRoot(), // Aquí está el widget que decide qué pantalla mostrar
+      builder: (context, child) {
+        return FToaster(
+          // ✅ Este se mueve DENTRO del builder
+          child: FTheme(
+            // ✅ El tema de forui
+            data: theme,
+            child: child!,
+          ),
+        );
+      },
+      home: const AppRoot(),
     );
   }
 }
