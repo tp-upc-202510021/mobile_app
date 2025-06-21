@@ -44,7 +44,7 @@ class AuthRepository {
     data.remove('refresh');
 
     final user = UserModel.fromJson(data);
-
+    await _storage.write(key: 'user_id', value: user.id.toString());
     return user;
   }
 

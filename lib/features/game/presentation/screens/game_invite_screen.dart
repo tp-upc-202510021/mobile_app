@@ -71,18 +71,7 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                                     title: '✅ Exito',
                                     body: "Invitación enviada",
                                   );
-                                  Future.delayed(
-                                    const Duration(seconds: 5),
-                                    () {
-                                      final context =
-                                          navigatorKey.currentContext;
-                                      if (context != null) {
-                                        NotificationService.showLoadingToast(
-                                          context,
-                                        );
-                                      }
-                                    },
-                                  );
+                                  NotificationService.showLoadingToast(context);
                                 } catch (e) {
                                   NotificationService.show(
                                     title: '❌ Error',

@@ -138,9 +138,9 @@ class WebSocketService {
 
               if (choice == 'accept') {
                 // 💬 Aquí solo avisas al usuario, luego esperarás el mensaje WebSocket 'game.accepted'
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Invitación aceptada.')),
-                );
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   const SnackBar(content: Text('Invitación aceptada.')),
+                // );
               } else {
                 NotificationService.dismissLoadingToast();
                 ScaffoldMessenger.of(context).showSnackBar(
