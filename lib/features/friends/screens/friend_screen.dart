@@ -5,6 +5,7 @@ import 'package:mobile_app/features/friends/data/friend_model.dart';
 import 'package:mobile_app/features/friends/data/friend_request_model.dart';
 import 'package:mobile_app/features/friends/friend_cubit.dart';
 import 'package:mobile_app/features/friends/friend_state.dart';
+import 'package:mobile_app/features/friends/screens/friend_profile_screen.dart';
 
 class FriendsScreen extends StatefulWidget {
   const FriendsScreen({super.key});
@@ -157,11 +158,32 @@ class _FriendsScreenState extends State<FriendsScreen> {
                     ),
                     color: Colors.white,
                     child: ListTile(
+                      onTap: () {
+                        print('Friend ID: ${friend.id}');
+                        final cubit = context.read<FriendCubit>();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                              value: cubit, // pasa el mismo cubit activo
+                              child: FriendProfileScreen(friendId: friend.id),
+                            ),
+                          ),
+                        ).then((_) {
+                          // 👇 Se ejecuta justo al volver
+                          cubit.loadFriendsAndRequests();
+                        });
+                      },
                       leading: CircleAvatar(
                         backgroundColor: Colors.green[200],
                         child: Text(friend.username[0].toUpperCase()),
                       ),
                       title: Text(friend.username),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                 ),

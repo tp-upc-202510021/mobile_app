@@ -1,4 +1,5 @@
 import 'package:mobile_app/features/friends/data/friend_model.dart';
+import 'package:mobile_app/features/friends/data/friend_profile_model.dart';
 import 'package:mobile_app/features/friends/data/friend_request_model.dart';
 import 'package:mobile_app/features/friends/data/friend_service.dart';
 
@@ -23,5 +24,9 @@ class FriendRepository {
 
   Future<void> respondRequest(int requestId, String action) async {
     await service.respondRequest(requestId, action);
+  }
+
+  Future<FriendProfile> getFriendProfile(int id) {
+    return service.getFriendProfile(id);
   }
 }
