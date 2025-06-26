@@ -45,29 +45,33 @@ class NotificationService {
       description: Text(data['body'] ?? ''),
       duration: duration,
       suffixBuilder: (data['show_button'] == true)
-          ? (ctx, entry, _) => IntrinsicHeight(
-              child: FButton(
-                style: ctx.theme.buttonStyles.primary.copyWith(
-                  contentStyle: ctx.theme.buttonStyles.primary.contentStyle
-                      .copyWith(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
-                        ),
-                        textStyle: FWidgetStateMap.all(
-                          ctx.theme.typography.xs.copyWith(
-                            color: ctx.theme.colors.primaryForeground,
+          ? (ctx, entry, _) => Material(
+              clipBehavior: Clip.hardEdge,
+              borderRadius: BorderRadius.circular(4),
+              child: IntrinsicHeight(
+                child: FButton(
+                  style: ctx.theme.buttonStyles.primary.copyWith(
+                    contentStyle: ctx.theme.buttonStyles.primary.contentStyle
+                        .copyWith(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
+                          textStyle: FWidgetStateMap.all(
+                            ctx.theme.typography.xs.copyWith(
+                              color: ctx.theme.colors.primaryForeground,
+                            ),
                           ),
                         ),
-                      ),
+                  ),
+                  onPress: () {
+                    entry.dismiss();
+                    if (data['on_pressed'] != null) {
+                      (data['on_pressed'] as VoidCallback).call();
+                    }
+                  },
+                  child: Text(data['button_text'] ?? 'Ir'),
                 ),
-                onPress: () {
-                  entry.dismiss();
-                  if (data['on_pressed'] != null) {
-                    (data['on_pressed'] as VoidCallback).call();
-                  }
-                },
-                child: Text(data['button_text'] ?? 'Ir'),
               ),
             )
           : null,
