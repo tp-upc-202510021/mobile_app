@@ -90,7 +90,7 @@ class GameRoundScreen extends StatelessWidget {
                         builder: (_) => MultiBlocProvider(
                           providers: [
                             BlocProvider.value(
-                              value: context.read<GameCubit>(),
+                              value: context.read<GameLoanCubit>(),
                             ),
                             BlocProvider.value(
                               value: context.read<RateEventCubit>(),

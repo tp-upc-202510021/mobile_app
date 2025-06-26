@@ -1,8 +1,8 @@
 // game_entry_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app/features/game/data/loan/game_repository.dart';
-import 'package:mobile_app/features/game/data/loan/game_service.dart';
+import 'package:mobile_app/features/game/data/loan/game_loan_repository.dart';
+import 'package:mobile_app/features/game/data/loan/game_loan_service.dart';
 
 import 'package:mobile_app/features/game/presentation/loan/game_loan_cubit.dart';
 import 'package:mobile_app/features/game/presentation/loan/rate_loan_event_cubit.dart';
@@ -15,10 +15,10 @@ class GameEntryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          GameCubit(LoanGameRepository(LoanGameService()))..loadGame(),
+          GameLoanCubit(LoanGameRepository(LoanGameService()))..loadGame(),
       child: Scaffold(
         body: Center(
-          child: BlocConsumer<GameCubit, GameState>(
+          child: BlocConsumer<GameLoanCubit, GameState>(
             listener: (context, state) {
               if (state is GameLoaded) {
                 Navigator.pushReplacement(
@@ -28,7 +28,7 @@ class GameEntryScreen extends StatelessWidget {
                       providers: [
                         BlocProvider.value(
                           value: context
-                              .read<GameCubit>(), // reutilizas GameCubit
+                              .read<GameLoanCubit>(), // reutilizas GameCubit
                         ),
                         BlocProvider(
                           create: (_) => RateEventCubit(

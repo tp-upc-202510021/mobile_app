@@ -57,7 +57,9 @@ class GameResultScreen extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (_) => MultiBlocProvider(
                         providers: [
-                          BlocProvider.value(value: context.read<GameCubit>()),
+                          BlocProvider.value(
+                            value: context.read<GameLoanCubit>(),
+                          ),
                           BlocProvider.value(
                             value: context.read<RateEventCubit>(),
                           ),

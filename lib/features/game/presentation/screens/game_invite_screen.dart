@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/features/friends/friend_cubit.dart';
 import 'package:mobile_app/features/friends/friend_state.dart';
 import 'package:mobile_app/features/game/presentation/loan/game_loan_cubit.dart';
+import 'package:mobile_app/features/game/presentation/investment/investment_game_cubit.dart';
 import 'package:mobile_app/main.dart';
 import 'package:mobile_app/shared/notification_service.dart';
 
@@ -42,34 +43,29 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                   trailing: IconButton(
                     icon: const Icon(Icons.send),
                     onPressed: () async {
-                      final confirmed = await showDialog<bool>(
+                      await showDialog(
                         context: context,
                         builder: (_) => AlertDialog(
-                          title: Text('¿Invitar a ${friend.username}?'),
+                          title: Text(
+                            '¿A qué juego invitar a ${friend.username}?',
+                          ),
+                          content: const Text('Selecciona el tipo de juego'),
                           actions: [
-                            TextButton(
-                              onPressed: () => {
-                                Navigator.of(
-                                  context,
-                                  rootNavigator: true,
-                                ).pop(),
-                              },
-                              child: const Text('No'),
-                            ),
                             TextButton(
                               onPressed: () async {
                                 Navigator.of(
                                   context,
                                   rootNavigator: true,
-                                ).pop(); // Cierra el diálogo
+                                ).pop();
                                 try {
-                                  print("confirmado");
-                                  final response = await context
-                                      .read<GameCubit>()
+                                  await context
+                                      .read<GameLoanCubit>()
                                       .inviteToGame(friend.id);
+
                                   NotificationService.show(
-                                    title: '✅ Exito',
-                                    body: "Invitación enviada",
+                                    title: '✅ Éxito',
+                                    body:
+                                        'Invitación al juego de préstamos enviada',
                                   );
                                   NotificationService.showLoadingToast(context);
                                 } catch (e) {
@@ -79,7 +75,37 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                                   );
                                 }
                               },
-                              child: const Text('Sí'),
+                              child: const Text('Préstamos'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                Navigator.of(
+                                  context,
+                                  rootNavigator: true,
+                                ).pop();
+                                try {
+                                  await context
+                                      .read<InvestmentGameCubit>()
+                                      .inviteUser(friend.id);
+
+                                  NotificationService.show(
+                                    title: '✅ Éxito',
+                                    body:
+                                        'Invitación al juego de inversiones enviada',
+                                  );
+                                  NotificationService.showLoadingToast(context);
+                                } catch (e) {
+                                  NotificationService.show(
+                                    title: '❌ Error',
+                                    body: e.toString(),
+                                  );
+                                }
+                              },
+                              child: const Text('Inversiones'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('Cancelar'),
                             ),
                           ],
                         ),

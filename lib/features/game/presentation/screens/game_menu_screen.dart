@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/features/friends/data/friend_repository.dart';
 import 'package:mobile_app/features/friends/data/friend_service.dart';
 import 'package:mobile_app/features/friends/friend_cubit.dart';
-import 'package:mobile_app/features/game/data/loan/game_repository.dart';
-import 'package:mobile_app/features/game/data/loan/game_service.dart';
+import 'package:mobile_app/features/game/data/investment/game_investment_repository.dart';
+import 'package:mobile_app/features/game/data/investment/game_investment_service.dart';
+import 'package:mobile_app/features/game/data/loan/game_loan_repository.dart';
+import 'package:mobile_app/features/game/data/loan/game_loan_service.dart';
+import 'package:mobile_app/features/game/presentation/investment/investment_game_cubit.dart';
 import 'package:mobile_app/features/game/presentation/loan/game_loan_cubit.dart';
 
 import 'package:mobile_app/features/game/presentation/screens/game_invite_screen.dart';
@@ -26,9 +29,17 @@ class GameMenuScreen extends StatelessWidget {
                 final friendRepository = FriendRepository(friendService);
                 final friendCubit = FriendCubit(friendRepository);
 
-                final gameService = LoanGameService();
-                final gameRepository = LoanGameRepository(gameService);
-                final gameCubit = GameCubit(gameRepository);
+                final loanGameService = LoanGameService();
+                final loanGameRepository = LoanGameRepository(loanGameService);
+                final loanGameCubit = GameLoanCubit(loanGameRepository);
+
+                final investmentGameService = InvestmentGameService();
+                final investmentGameRepository = InvestmentGameRepository(
+                  service: investmentGameService,
+                );
+                final investmentGameCubit = InvestmentGameCubit(
+                  investmentGameRepository,
+                );
 
                 Navigator.push(
                   context,
@@ -36,7 +47,10 @@ class GameMenuScreen extends StatelessWidget {
                     builder: (_) => MultiBlocProvider(
                       providers: [
                         BlocProvider.value(value: friendCubit),
-                        BlocProvider.value(value: gameCubit),
+                        BlocProvider.value(value: loanGameCubit),
+                        BlocProvider.value(
+                          value: investmentGameCubit,
+                        ), // ✅ nuevo
                       ],
                       child: const InviteFriendScreen(),
                     ),

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/features/authentication/services/websocket_service.dart';
 import 'package:mobile_app/features/game/data/loan/game_data_loan_model.dart';
-import 'package:mobile_app/features/game/data/loan/game_repository.dart';
+import 'package:mobile_app/features/game/data/loan/game_loan_repository.dart';
 import 'package:mobile_app/features/game/data/loan/rate_event_loan_model.dart';
 
 abstract class GameState {}
@@ -44,10 +44,10 @@ class RateEventError extends GameState {
   RateEventError(this.message);
 }
 
-class GameCubit extends Cubit<GameState> {
+class GameLoanCubit extends Cubit<GameState> {
   final LoanGameRepository repository;
 
-  GameCubit(this.repository) : super(GameInitial());
+  GameLoanCubit(this.repository) : super(GameInitial());
 
   Future<void> loadGame() async {
     emit(GameLoading());

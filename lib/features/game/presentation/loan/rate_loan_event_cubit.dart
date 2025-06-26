@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app/features/game/data/loan/game_repository.dart';
+import 'package:mobile_app/features/game/data/loan/game_loan_repository.dart';
 import 'package:mobile_app/features/game/data/loan/rate_event_loan_model.dart';
 import 'package:mobile_app/features/game/presentation/loan/game_loan_cubit.dart';
 
