@@ -1,16 +1,16 @@
-import 'package:mobile_app/features/game/data/game_data_model.dart';
+import 'package:mobile_app/features/game/data/loan/game_data_loan_model.dart';
 import 'package:mobile_app/features/game/data/game_invitation_response_model.dart';
-import 'package:mobile_app/features/game/data/game_service.dart';
-import 'package:mobile_app/features/game/data/rate_event_model.dart';
+import 'package:mobile_app/features/game/data/loan/game_service.dart';
+import 'package:mobile_app/features/game/data/loan/rate_event_loan_model.dart';
 
-class GameRepository {
-  final GameService service;
+class LoanGameRepository {
+  final LoanGameService service;
 
-  GameRepository(this.service);
+  LoanGameRepository(this.service);
 
-  Future<GameData> fetchGame() => service.generateGame();
+  Future<GameLoanData> fetchGame() => service.generateGame();
 
-  Future<RateEventResponse> sendRateEvent(RateEventRequest request) {
+  Future<RateEventResponse> sendRateEvent(RateEventLoanRequest request) {
     return service.sendRateEvent(request);
   }
 

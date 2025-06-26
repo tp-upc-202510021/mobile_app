@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app/features/game/data/game_data_model.dart';
-import 'package:mobile_app/features/game/data/game_repository.dart';
-import 'package:mobile_app/features/game/data/game_service.dart';
-import 'package:mobile_app/features/game/presentation/game_cubit.dart';
-import 'package:mobile_app/features/game/presentation/rate_event_cubit.dart';
-import 'package:mobile_app/features/game/presentation/screens/game_round_screen.dart';
+import 'package:mobile_app/features/game/data/loan/game_data_loan_model.dart';
+import 'package:mobile_app/features/game/data/loan/game_repository.dart';
+import 'package:mobile_app/features/game/data/loan/game_service.dart';
+import 'package:mobile_app/features/game/presentation/loan/game_loan_cubit.dart';
+import 'package:mobile_app/features/game/presentation/loan/rate_loan_event_cubit.dart';
+import 'package:mobile_app/features/game/presentation/loan/screens/game_loan_round_screen.dart';
 import 'package:mobile_app/main.dart';
 import 'package:mobile_app/shared/notification_service.dart';
 import 'package:web_socket_channel/io.dart';
@@ -62,7 +62,7 @@ class WebSocketService {
 
       if (data['type'] == 'game.accepted' || data['type'] == 'game.started') {
         NotificationService.dismissLoadingToast();
-        final gameData = GameData.fromJson(data['game_data']);
+        final gameData = GameLoanData.fromJson(data['game_data']);
         final sessionId = data['session_id'];
 
         NotificationService.show(
@@ -77,11 +77,12 @@ class WebSocketService {
                 builder: (_) => MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                      create: (_) => GameCubit(GameRepository(GameService())),
+                      create: (_) =>
+                          GameCubit(LoanGameRepository(LoanGameService())),
                     ),
                     BlocProvider(
                       create: (_) =>
-                          RateEventCubit(GameRepository(GameService())),
+                          RateEventCubit(LoanGameRepository(LoanGameService())),
                     ),
                   ],
                   child: GameRoundScreen(game: gameData, roundIndex: 0),
@@ -131,7 +132,7 @@ class WebSocketService {
 
             try {
               // la llamada activa al API
-              await GameRepository(GameService()).respondToInvitation(
+              await LoanGameRepository(LoanGameService()).respondToInvitation(
                 sessionId: sessionId,
                 response: choice, // "accept" o "reject"
               );

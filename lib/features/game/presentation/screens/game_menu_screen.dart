@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/features/friends/data/friend_repository.dart';
 import 'package:mobile_app/features/friends/data/friend_service.dart';
 import 'package:mobile_app/features/friends/friend_cubit.dart';
-import 'package:mobile_app/features/game/data/game_repository.dart';
-import 'package:mobile_app/features/game/data/game_service.dart';
-import 'package:mobile_app/features/game/presentation/game_cubit.dart';
+import 'package:mobile_app/features/game/data/loan/game_repository.dart';
+import 'package:mobile_app/features/game/data/loan/game_service.dart';
+import 'package:mobile_app/features/game/presentation/loan/game_loan_cubit.dart';
 
 import 'package:mobile_app/features/game/presentation/screens/game_invite_screen.dart';
 
@@ -26,8 +26,8 @@ class GameMenuScreen extends StatelessWidget {
                 final friendRepository = FriendRepository(friendService);
                 final friendCubit = FriendCubit(friendRepository);
 
-                final gameService = GameService();
-                final gameRepository = GameRepository(gameService);
+                final gameService = LoanGameService();
+                final gameRepository = LoanGameRepository(gameService);
                 final gameCubit = GameCubit(gameRepository);
 
                 Navigator.push(

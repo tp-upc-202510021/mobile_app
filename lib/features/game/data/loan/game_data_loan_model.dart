@@ -1,16 +1,16 @@
-import 'package:mobile_app/features/game/data/rate_event_model.dart';
+import 'package:mobile_app/features/game/data/loan/rate_event_loan_model.dart';
 
-class GameData {
+class GameLoanData {
   final BaseRate baseRate;
-  final List<GameRound> rounds;
+  final List<GameLoanRound> rounds;
 
-  GameData({required this.baseRate, required this.rounds});
+  GameLoanData({required this.baseRate, required this.rounds});
 
-  factory GameData.fromJson(Map<String, dynamic> json) {
-    return GameData(
+  factory GameLoanData.fromJson(Map<String, dynamic> json) {
+    return GameLoanData(
       baseRate: BaseRate.fromJson(json['base_rate_BCRP']),
       rounds: (json['rounds'] as List)
-          .map((r) => GameRound.fromJson(r))
+          .map((r) => GameLoanRound.fromJson(r))
           .toList(),
     );
   }
@@ -37,7 +37,7 @@ class BaseRate {
   );
 }
 
-class GameRound {
+class GameLoanRound {
   final int round;
   final String statement;
   final int requiredAmount;
@@ -46,7 +46,7 @@ class GameRound {
   final HiddenEvent hiddenEvent;
   final List<LoanOption> options;
 
-  GameRound({
+  GameLoanRound({
     required this.round,
     required this.statement,
     required this.requiredAmount,
@@ -56,7 +56,7 @@ class GameRound {
     required this.options,
   });
 
-  factory GameRound.fromJson(Map<String, dynamic> json) => GameRound(
+  factory GameLoanRound.fromJson(Map<String, dynamic> json) => GameLoanRound(
     round: json['round'],
     statement: json['statement'],
     requiredAmount: json['required_amount'],

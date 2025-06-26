@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app/features/game/data/game_repository.dart';
-import 'package:mobile_app/features/game/data/rate_event_model.dart';
-import 'package:mobile_app/features/game/presentation/game_cubit.dart';
+import 'package:mobile_app/features/game/data/loan/game_repository.dart';
+import 'package:mobile_app/features/game/data/loan/rate_event_loan_model.dart';
+import 'package:mobile_app/features/game/presentation/loan/game_loan_cubit.dart';
 
 class RateEventCubit extends Cubit<GameState> {
-  final GameRepository repository;
+  final LoanGameRepository repository;
 
   RateEventCubit(this.repository) : super(RateEventInitial());
 
@@ -16,7 +16,7 @@ class RateEventCubit extends Cubit<GameState> {
   }) async {
     emit(RateEventLoading());
     try {
-      final request = RateEventRequest(
+      final request = RateEventLoanRequest(
         baseRate: baseRate,
         economicOutlookStatement: economicOutlookStatement,
         rateVariation: rateVariation,

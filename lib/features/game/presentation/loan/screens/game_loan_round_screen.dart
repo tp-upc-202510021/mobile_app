@@ -1,14 +1,14 @@
 // game_round_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app/features/game/data/game.dart';
-import 'package:mobile_app/features/game/data/game_data_model.dart';
-import 'package:mobile_app/features/game/presentation/game_cubit.dart';
-import 'package:mobile_app/features/game/presentation/rate_event_cubit.dart';
-import 'package:mobile_app/features/game/presentation/screens/game_result_screen.dart';
+import 'package:mobile_app/features/game/data/loan/loan_calc.dart';
+import 'package:mobile_app/features/game/data/loan/game_data_loan_model.dart';
+import 'package:mobile_app/features/game/presentation/loan/game_loan_cubit.dart';
+import 'package:mobile_app/features/game/presentation/loan/rate_loan_event_cubit.dart';
+import 'package:mobile_app/features/game/presentation/loan/screens/game_loan_result_screen.dart';
 
 class GameRoundScreen extends StatelessWidget {
-  final GameData game;
+  final GameLoanData game;
   final int roundIndex;
 
   const GameRoundScreen({

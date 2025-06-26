@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/features/friends/friend_cubit.dart';
 import 'package:mobile_app/features/friends/friend_state.dart';
-import 'package:mobile_app/features/game/presentation/game_cubit.dart';
+import 'package:mobile_app/features/game/presentation/loan/game_loan_cubit.dart';
 import 'package:mobile_app/main.dart';
 import 'package:mobile_app/shared/notification_service.dart';
 

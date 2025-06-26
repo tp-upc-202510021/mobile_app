@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_app/features/authentication/services/websocket_service.dart';
-import 'package:mobile_app/features/game/data/game_data_model.dart';
-import 'package:mobile_app/features/game/data/game_repository.dart';
-import 'package:mobile_app/features/game/data/rate_event_model.dart';
+import 'package:mobile_app/features/game/data/loan/game_data_loan_model.dart';
+import 'package:mobile_app/features/game/data/loan/game_repository.dart';
+import 'package:mobile_app/features/game/data/loan/rate_event_loan_model.dart';
 
 abstract class GameState {}
 
@@ -13,7 +13,7 @@ class GameInitial extends GameState {}
 class GameLoading extends GameState {}
 
 class GameLoaded extends GameState {
-  final GameData game;
+  final GameLoanData game;
   GameLoaded(this.game);
 }
 
@@ -45,7 +45,7 @@ class RateEventError extends GameState {
 }
 
 class GameCubit extends Cubit<GameState> {
-  final GameRepository repository;
+  final LoanGameRepository repository;
 
   GameCubit(this.repository) : super(GameInitial());
 

@@ -2,14 +2,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobile_app/config/api_config.dart';
-import 'package:mobile_app/features/game/data/game_data_model.dart';
+import 'package:mobile_app/features/game/data/loan/game_data_loan_model.dart';
 import 'package:mobile_app/features/game/data/game_invitation_response_model.dart';
-import 'package:mobile_app/features/game/data/rate_event_model.dart';
+import 'package:mobile_app/features/game/data/loan/rate_event_loan_model.dart';
 
-class GameService {
+class LoanGameService {
   final _storage = const FlutterSecureStorage();
 
-  Future<GameData> generateGame() async {
+  Future<GameLoanData> generateGame() async {
     final token = await _storage.read(key: 'access_token');
     final url = Uri.parse('${ApiConfig.baseUrl}/game/generate-loan-game/ai/');
     final res = await http.get(
@@ -21,13 +21,13 @@ class GameService {
     );
 
     if (res.statusCode == 200) {
-      return GameData.fromJson(json.decode(res.body));
+      return GameLoanData.fromJson(json.decode(res.body));
     } else {
       throw Exception('Error generating game: ${res.statusCode}');
     }
   }
 
-  Future<RateEventResponse> sendRateEvent(RateEventRequest request) async {
+  Future<RateEventResponse> sendRateEvent(RateEventLoanRequest request) async {
     final token = await _storage.read(key: 'access_token');
     final url = Uri.parse('${ApiConfig.baseUrl}/game/rate-event/');
 

@@ -1,4 +1,4 @@
-import 'package:mobile_app/features/game/data/game_data_model.dart';
+import 'package:mobile_app/features/game/data/loan/game_data_loan_model.dart';
 import 'dart:math';
 
 double _monthlyRate(double annualRate) {

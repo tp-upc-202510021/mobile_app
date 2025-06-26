@@ -1,12 +1,12 @@
 // game_entry_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_app/features/game/data/game_repository.dart';
-import 'package:mobile_app/features/game/data/game_service.dart';
+import 'package:mobile_app/features/game/data/loan/game_repository.dart';
+import 'package:mobile_app/features/game/data/loan/game_service.dart';
 
-import 'package:mobile_app/features/game/presentation/game_cubit.dart';
-import 'package:mobile_app/features/game/presentation/rate_event_cubit.dart';
-import 'package:mobile_app/features/game/presentation/screens/game_round_screen.dart';
+import 'package:mobile_app/features/game/presentation/loan/game_loan_cubit.dart';
+import 'package:mobile_app/features/game/presentation/loan/rate_loan_event_cubit.dart';
+import 'package:mobile_app/features/game/presentation/loan/screens/game_loan_round_screen.dart';
 
 class GameEntryScreen extends StatelessWidget {
   const GameEntryScreen({super.key});
@@ -14,7 +14,8 @@ class GameEntryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => GameCubit(GameRepository(GameService()))..loadGame(),
+      create: (_) =>
+          GameCubit(LoanGameRepository(LoanGameService()))..loadGame(),
       child: Scaffold(
         body: Center(
           child: BlocConsumer<GameCubit, GameState>(
@@ -30,8 +31,9 @@ class GameEntryScreen extends StatelessWidget {
                               .read<GameCubit>(), // reutilizas GameCubit
                         ),
                         BlocProvider(
-                          create: (_) =>
-                              RateEventCubit(GameRepository(GameService())),
+                          create: (_) => RateEventCubit(
+                            LoanGameRepository(LoanGameService()),
+                          ),
                         ),
                       ],
                       child: GameRoundScreen(game: state.game, roundIndex: 0),

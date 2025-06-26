@@ -1,10 +1,10 @@
-class RateEventRequest {
+class RateEventLoanRequest {
   final double baseRate;
   final String economicOutlookStatement;
   final RateVariation rateVariation;
   final HiddenEvent hiddenEvent;
 
-  RateEventRequest({
+  RateEventLoanRequest({
     required this.baseRate,
     required this.economicOutlookStatement,
     required this.rateVariation,
