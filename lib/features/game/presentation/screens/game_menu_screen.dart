@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mobile_app/features/friends/data/friend_repository.dart';
 import 'package:mobile_app/features/friends/data/friend_service.dart';
 import 'package:mobile_app/features/friends/friend_cubit.dart';
@@ -17,55 +18,101 @@ class GameMenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Jugar y Aprender')),
-      body: Center(
+      appBar: AppBar(title: const Text('Jugar y Aprender'), centerTitle: true),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                final friendService = FriendService();
-                final friendRepository = FriendRepository(friendService);
-                final friendCubit = FriendCubit(friendRepository);
-
-                final loanGameService = LoanGameService();
-                final loanGameRepository = LoanGameRepository(loanGameService);
-                final loanGameCubit = GameLoanCubit(loanGameRepository);
-
-                final investmentGameService = InvestmentGameService();
-                final investmentGameRepository = InvestmentGameRepository(
-                  service: investmentGameService,
-                );
-                final investmentGameCubit = InvestmentGameCubit(
-                  investmentGameRepository,
-                );
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(value: friendCubit),
-                        BlocProvider.value(value: loanGameCubit),
-                        BlocProvider.value(
-                          value: investmentGameCubit,
-                        ), // ✅ nuevo
-                      ],
-                      child: const InviteFriendScreen(),
-                    ),
-                  ),
-                );
-              },
-
-              child: const Text('🎮 Empezar Juego'),
+            const SizedBox(height: 40),
+            SizedBox(
+              height: 250,
+              child: SvgPicture.asset(
+                'assets/images/game_menu.svg',
+                fit: BoxFit.contain,
+              ),
             ),
+
+            const SizedBox(height: 40),
+
+            // Botón Jugar
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                label: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  child: Text(
+                    '🎮 Empezar Juego',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
+                ),
+                onPressed: () {
+                  final friendService = FriendService();
+                  final friendRepository = FriendRepository(friendService);
+                  final friendCubit = FriendCubit(friendRepository);
+
+                  final loanGameService = LoanGameService();
+                  final loanGameRepository = LoanGameRepository(
+                    loanGameService,
+                  );
+                  final loanGameCubit = GameLoanCubit(loanGameRepository);
+
+                  final investmentGameService = InvestmentGameService();
+                  final investmentGameRepository = InvestmentGameRepository(
+                    service: investmentGameService,
+                  );
+                  final investmentGameCubit = InvestmentGameCubit(
+                    investmentGameRepository,
+                  );
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider.value(value: friendCubit),
+                          BlocProvider.value(value: loanGameCubit),
+                          BlocProvider.value(value: investmentGameCubit),
+                        ],
+                        child: const InviteFriendScreen(),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
             const SizedBox(height: 16),
-            TextButton(
-              onPressed: () {
-                // Aquí iría navegación a instrucciones si quieres
-              },
-              child: const Text('📘 Ver instrucciones'),
+
+            // Botón Instrucciones
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                label: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  child: Text(
+                    '📘 Ver instrucciones',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: () {
+                  // Navegación a instrucciones
+                },
+              ),
             ),
           ],
         ),

@@ -55,7 +55,6 @@ class HomeScreen extends StatelessWidget {
                   subtitle: 'Avanza paso a paso en tu camino financiero',
                   color: Colors.deepPurpleAccent,
                   onTap: () {
-                    context.read<AuthCubit>().webSocketService.simulateToast();
                     Navigator.push(
                       context,
                       MaterialPageRoute(

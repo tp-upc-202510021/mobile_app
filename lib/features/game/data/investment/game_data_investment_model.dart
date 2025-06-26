@@ -144,3 +144,13 @@ class FxEvent {
     );
   }
 }
+
+extension GameInvestmentDataX on GameInvestmentData {
+  GameInvestmentData copyWithNewCapital(double newCapital, FxRate newBaseRate) {
+    return GameInvestmentData(
+      initialCapitalPen: newCapital,
+      baseFxRate: newBaseRate,
+      rounds: rounds,
+    );
+  }
+}
