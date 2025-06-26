@@ -1,45 +1,9 @@
 import 'dart:math' as math;
 
+import 'package:mobile_app/features/game/data/investment/apply_exchange_investment_model.dart';
+import 'package:mobile_app/features/game/data/investment/game_data_investment_model.dart';
+
 /* ==== MODELOS BÁSICOS ==== */
-
-enum RiskLevel { low, medium, high }
-
-enum Frequency { annual, semiAnnual, quarterly, monthly }
-
-extension FrequencyX on Frequency {
-  int get periodsPerYear => switch (this) {
-    Frequency.annual => 1,
-    Frequency.semiAnnual => 2,
-    Frequency.quarterly => 4,
-    Frequency.monthly => 12,
-  };
-}
-
-class InvestmentOption {
-  final String title;
-  final String description;
-  final double expectedReturnPct; // Ej.: 8  ⇒ 8 %
-  final double volatilityPct; // No se usa aquí, pero se mantiene.
-  final RiskLevel riskLevel;
-  final Frequency frequency;
-  final String currency; // "PEN" | "USD"
-
-  InvestmentOption({
-    required this.title,
-    required this.description,
-    required this.expectedReturnPct,
-    required this.volatilityPct,
-    required this.riskLevel,
-    required this.frequency,
-    required this.currency,
-  });
-}
-
-class FxRate {
-  final double buy; // PEN que reciben al vender USD
-  final double sell; // PEN que pagan al comprar USD
-  const FxRate({required this.buy, required this.sell});
-}
 
 class InvestmentOutcome {
   final String currency; // "PEN" o "USD"

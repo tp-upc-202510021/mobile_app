@@ -2,9 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_app/features/game/data/investment/game_data_investment_model.dart';
+import 'package:mobile_app/features/game/data/investment/game_investment_repository.dart';
+import 'package:mobile_app/features/game/data/investment/game_investment_service.dart';
 import 'package:mobile_app/features/game/data/loan/game_data_loan_model.dart';
 import 'package:mobile_app/features/game/data/loan/game_loan_repository.dart';
 import 'package:mobile_app/features/game/data/loan/game_loan_service.dart';
+import 'package:mobile_app/features/game/presentation/investment/investment_game_cubit.dart';
+import 'package:mobile_app/features/game/presentation/investment/screens/investment_game_round.dart';
 import 'package:mobile_app/features/game/presentation/loan/game_loan_cubit.dart';
 import 'package:mobile_app/features/game/presentation/loan/rate_loan_event_cubit.dart';
 import 'package:mobile_app/features/game/presentation/loan/screens/game_loan_round_screen.dart';
@@ -60,10 +65,10 @@ class WebSocketService {
       final context = navigatorKey.currentContext;
       if (context == null) return;
 
+      final gameType = data['game_type']; // 👈 Puede ser 'loan' o 'investment'
+
       if (data['type'] == 'game.accepted' || data['type'] == 'game.started') {
         NotificationService.dismissLoadingToast();
-        final gameData = GameLoanData.fromJson(data['game_data']);
-        final sessionId = data['session_id'];
 
         NotificationService.show(
           title: '¡El juego ya comenzó! 🚀',
@@ -71,24 +76,47 @@ class WebSocketService {
           showButton: true,
           durationSeconds: 10,
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => MultiBlocProvider(
-                  providers: [
-                    BlocProvider(
-                      create: (_) =>
-                          GameLoanCubit(LoanGameRepository(LoanGameService())),
-                    ),
-                    BlocProvider(
-                      create: (_) =>
-                          RateEventCubit(LoanGameRepository(LoanGameService())),
-                    ),
-                  ],
-                  child: GameRoundScreen(game: gameData, roundIndex: 0),
+            if (gameType == 'loan') {
+              final gameData = GameLoanData.fromJson(data['game_data']);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (_) => GameLoanCubit(
+                          LoanGameRepository(LoanGameService()),
+                        ),
+                      ),
+                      BlocProvider(
+                        create: (_) => RateEventCubit(
+                          LoanGameRepository(LoanGameService()),
+                        ),
+                      ),
+                    ],
+                    child: GameRoundScreen(game: gameData, roundIndex: 0),
+                  ),
                 ),
-              ),
-            );
+              );
+            } else if (gameType == 'investment') {
+              final gameData = GameInvestmentData.fromJson(data['game_data']);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider(
+                    create: (_) => InvestmentGameCubit(
+                      InvestmentGameRepository(
+                        service: InvestmentGameService(),
+                      ),
+                    ),
+                    child: InvestmentGameRoundScreen(
+                      game: gameData,
+                      roundIndex: 0,
+                    ),
+                  ),
+                ),
+              );
+            }
           },
         );
         return;
@@ -113,14 +141,13 @@ class WebSocketService {
                 content: const Text('¿Quieres aceptar la invitación al juego?'),
                 actions: [
                   TextButton(
-                    onPressed: () =>
-                        Navigator.pop(context, 'reject'), // << tú decides aquí
+                    onPressed: () => Navigator.pop(context, 'reject'),
                     child: const Text('Rechazar'),
                   ),
                   TextButton(
-                    onPressed: () => {
-                      Navigator.pop(context, 'accept'),
-                      NotificationService.showLoadingToast(context),
+                    onPressed: () {
+                      Navigator.pop(context, 'accept');
+                      NotificationService.showLoadingToast(context);
                     },
                     child: const Text('Aceptar'),
                   ),
@@ -131,24 +158,26 @@ class WebSocketService {
             if (choice == null) return;
 
             try {
-              // la llamada activa al API
-              await LoanGameRepository(LoanGameService()).respondToInvitation(
-                sessionId: sessionId,
-                response: choice, // "accept" o "reject"
-              );
+              if (gameType == 'loan') {
+                await LoanGameRepository(
+                  LoanGameService(),
+                ).respondToInvitation(sessionId: sessionId, response: choice);
+              } else if (gameType == 'investment') {
+                await InvestmentGameRepository(
+                  service: InvestmentGameService(),
+                ).respondToInvitation(sessionId: sessionId, response: choice);
+              }
 
-              if (choice == 'accept') {
-                // 💬 Aquí solo avisas al usuario, luego esperarás el mensaje WebSocket 'game.accepted'
-                // ScaffoldMessenger.of(context).showSnackBar(
-                //   const SnackBar(content: Text('Invitación aceptada.')),
-                // );
-              } else {
+              if (choice == 'reject') {
                 NotificationService.dismissLoadingToast();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Has rechazado la invitación.')),
                 );
               }
+
+              // Si acepta, espera el mensaje 'game.accepted' o 'game.started'
             } catch (e) {
+              NotificationService.dismissLoadingToast();
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(SnackBar(content: Text('Error al responder: $e')));

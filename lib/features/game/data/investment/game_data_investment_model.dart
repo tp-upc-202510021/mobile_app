@@ -1,6 +1,8 @@
+import 'package:mobile_app/features/game/data/investment/apply_exchange_investment_model.dart';
+
 class GameInvestmentData {
   final double initialCapitalPen;
-  final BaseFxRate baseFxRate;
+  final FxRate baseFxRate;
   final List<InvestmentRound> rounds;
 
   GameInvestmentData({
@@ -11,23 +13,12 @@ class GameInvestmentData {
 
   factory GameInvestmentData.fromJson(Map<String, dynamic> json) {
     return GameInvestmentData(
-      initialCapitalPen: json['initial_capital_pen'],
-      baseFxRate: BaseFxRate.fromJson(json['base_fx_rate']),
-      rounds: (json['rounds'] as List)
-          .map((e) => InvestmentRound.fromJson(e))
+      initialCapitalPen: (json['initial_capital_pen'] as num).toDouble(),
+      baseFxRate: FxRate.fromJson(json['base_fx_rate']),
+      rounds: (json['rounds'] as List<dynamic>)
+          .map((e) => InvestmentRound.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
-  }
-}
-
-class BaseFxRate {
-  final double buy;
-  final double sell;
-
-  BaseFxRate({required this.buy, required this.sell});
-
-  factory BaseFxRate.fromJson(Map<String, dynamic> json) {
-    return BaseFxRate(buy: json['buy'], sell: json['sell']);
   }
 }
 
@@ -48,11 +39,53 @@ class InvestmentRound {
     return InvestmentRound(
       round: json['round'],
       investmentDurationMonths: json['investment_duration_months'],
-      options: (json['options'] as List)
-          .map((e) => InvestmentOption.fromJson(e))
+      options: (json['options'] as List<dynamic>)
+          .map((e) => InvestmentOption.fromJson(e as Map<String, dynamic>))
           .toList(),
       fxEvent: FxEvent.fromJson(json['fx_event']),
     );
+  }
+}
+
+enum RiskLevel { low, medium, high }
+
+enum Frequency { annual, semiAnnual, quarterly, monthly }
+
+extension FrequencyX on Frequency {
+  int get periodsPerYear => switch (this) {
+    Frequency.annual => 1,
+    Frequency.semiAnnual => 2,
+    Frequency.quarterly => 4,
+    Frequency.monthly => 12,
+  };
+}
+
+RiskLevel riskLevelFromString(String value) {
+  switch (value.toLowerCase().trim()) {
+    case 'low':
+      return RiskLevel.low;
+    case 'medium':
+      return RiskLevel.medium;
+    case 'high':
+      return RiskLevel.high;
+    default:
+      throw Exception('❌ Invalid risk level: "$value"');
+  }
+}
+
+Frequency frequencyFromString(String value) {
+  final normalized = value.toLowerCase().replaceAll('_', '');
+  switch (normalized) {
+    case 'annual':
+      return Frequency.annual;
+    case 'semiannual':
+      return Frequency.semiAnnual;
+    case 'quarterly':
+      return Frequency.quarterly;
+    case 'monthly':
+      return Frequency.monthly;
+    default:
+      throw Exception('❌ Invalid frequency: "$value"');
   }
 }
 
@@ -61,8 +94,8 @@ class InvestmentOption {
   final String description;
   final double expectedReturnPct;
   final double volatilityPct;
-  final String riskLevel;
-  final String frequency;
+  final RiskLevel riskLevel;
+  final Frequency frequency;
   final String currency;
 
   InvestmentOption({
@@ -77,13 +110,13 @@ class InvestmentOption {
 
   factory InvestmentOption.fromJson(Map<String, dynamic> json) {
     return InvestmentOption(
-      title: json['title'],
-      description: json['description'],
-      expectedReturnPct: json['expected_return_pct'],
-      volatilityPct: json['volatility_pct'],
-      riskLevel: json['risk_level'],
-      frequency: json['frequency'],
-      currency: json['currency'],
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      expectedReturnPct: (json['expected_return_pct'] as num).toDouble(),
+      volatilityPct: (json['volatility_pct'] as num).toDouble(),
+      riskLevel: riskLevelFromString(json['risk_level']),
+      frequency: frequencyFromString(json['frequency']),
+      currency: json['currency'] ?? 'PEN',
     );
   }
 }
@@ -105,7 +138,8 @@ class FxEvent {
     return FxEvent(
       probabilityToChange: json['probability_to_change'],
       typeOfChange: json['type_of_change'],
-      percentageOfVariation: json['percentage_of_variation'],
+      percentageOfVariation: (json['percentage_of_variation'] as num)
+          .toDouble(),
       eventDescription: json['event_description'],
     );
   }

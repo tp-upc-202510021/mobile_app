@@ -61,6 +61,9 @@ class InvestmentGameService {
     final token = await _storage.read(key: 'access_token');
     final url = Uri.parse('${ApiConfig.baseUrl}/game/apply-exchange-event/');
 
+    print('🌍 URL: $url');
+    print('📡 Enviando POST con: ${jsonEncode(data)}');
+
     final res = await http.post(
       url,
       headers: {
@@ -70,10 +73,34 @@ class InvestmentGameService {
       body: jsonEncode(data),
     );
 
-    if (res.statusCode == 200) {
-      return ApplyExchangeEventResponse.fromJson(json.decode(res.body));
-    } else {
+    print('📨 Código de estado: ${res.statusCode}');
+    print('📨 Body crudo: ${res.body}');
+
+    if (res.statusCode != 200) {
       throw Exception('Error ${res.statusCode}: ${res.body}');
+    }
+
+    if (res.body.isEmpty) {
+      throw Exception('Respuesta vacía del servidor');
+    }
+
+    try {
+      final decoded = json.decode(res.body);
+      print('📦 Decoded JSON: $decoded (${decoded.runtimeType})');
+
+      if (decoded == null || decoded is! Map<String, dynamic>) {
+        throw Exception('❌ JSON inválido o nulo');
+      }
+
+      if (decoded['event'] == null || decoded['base_rate'] == null) {
+        throw Exception('❌ Campos faltantes en la respuesta');
+      }
+
+      return ApplyExchangeEventResponse.fromJson(decoded);
+    } catch (e, st) {
+      print('❌ Error al parsear la respuesta: $e');
+      print('📉 Stacktrace: $st');
+      throw Exception('Error al parsear la respuesta: $e');
     }
   }
 }

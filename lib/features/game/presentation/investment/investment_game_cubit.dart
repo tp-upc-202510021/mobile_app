@@ -34,6 +34,7 @@ class InvestmentGameCubit extends Cubit<InvestmentGameState> {
     emit(InvestmentGameLoading());
     try {
       final result = await repository.applyExchangeEvent(eventData);
+
       emit(ExchangeEventApplied(result));
     } catch (e) {
       emit(InvestmentGameError(e.toString()));
