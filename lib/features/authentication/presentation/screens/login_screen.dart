@@ -133,25 +133,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const AssessmentVisualScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'test pantalla',
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     TextButton(
+                  //       onPressed: () {
+                  //         Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //             builder: (_) => const AssessmentVisualScreen(),
+                  //           ),
+                  //         );
+                  //       },
+                  //       child: const Text(
+                  //         'test pantalla',
+                  //         style: TextStyle(color: Colors.blue),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
