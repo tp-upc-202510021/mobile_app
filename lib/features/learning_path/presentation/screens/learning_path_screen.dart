@@ -71,6 +71,7 @@ class LearningPathScreen extends StatelessWidget {
                     final detail = moduleDetailCubit.state.data;
 
                     if (detail != null && detail.pages.isNotEmpty) {
+                      print('Module ID: ${module.id}');
                       Navigator.push(
                         context,
                         MaterialPageRoute(
