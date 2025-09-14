@@ -24,9 +24,14 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Obtén la instancia de AuthRepository (ajusta según tu arquitectura)
+    final authRepository = context.read<AuthCubit>().authRepository;
     return BlocProvider(
       create: (_) {
-        final cubit = ProfileCubit(ProfileRepository(ProfileService()));
+        final cubit = ProfileCubit(
+          ProfileRepository(ProfileService(authRepository)),
+          context.read<AuthCubit>(),
+        );
         Future.delayed(const Duration(milliseconds: 500), () {
           cubit.loadProfile();
         });

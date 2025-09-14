@@ -72,4 +72,12 @@ class AuthRepository {
     print('📦 Access Token: $accessToken');
     print('♻️ Refresh Token: $refreshToken');
   }
+
+  // TODO: Implement token refresh logic (BACKEND endpoint)
+  Future<void> refreshAccessToken() async {
+    final refreshToken = await getRefreshToken();
+    if (refreshToken == null) throw Exception('No refresh token found');
+    final data = await _service.refreshToken(refreshToken);
+    await _storage.write(key: 'access_token', value: data['access']);
+  }
 }

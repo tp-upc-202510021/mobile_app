@@ -45,6 +45,7 @@ dependencies:
   web_socket_channel: ^3.0.3
   confetti: ^0.8.0
   flutter_svg: ^2.2.0
+  http_interceptor: ^2.0.0
 
 dev_dependencies:
   flutter_test:

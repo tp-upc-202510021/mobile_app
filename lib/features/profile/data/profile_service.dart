@@ -1,19 +1,19 @@
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
+import 'package:http_interceptor/http_interceptor.dart';
 import 'package:mobile_app/config/api_config.dart';
 
+import 'package:mobile_app/network/http_client.dart';
+import 'package:mobile_app/features/authentication/repositories/auth_repository.dart';
+
 class ProfileService {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final InterceptedClient client;
+
+  ProfileService(AuthRepository authRepository)
+    : client = createInterceptedClient(authRepository);
 
   Future<Map<String, dynamic>> getCurrentUser() async {
-    final token = await _storage.read(key: 'access_token');
     final url = Uri.parse('${ApiConfig.baseUrl}/me/');
-
-    final response = await http.get(
-      url,
-      headers: {'Authorization': 'Bearer $token'},
-    );
+    final response = await client.get(url);
 
     if (response.statusCode == 200) {
       return json.decode(response.body);

@@ -46,4 +46,17 @@ class AuthService {
       throw Exception('Failed to register');
     }
   }
+
+  Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/refresh/'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'refresh': refreshToken}),
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to refresh token');
+    }
+  }
 }

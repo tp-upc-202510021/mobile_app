@@ -38,6 +38,7 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this._repository, this._webSocketService) : super(AuthState()) {
     checkAuthStatus();
   }
+  AuthRepository get authRepository => _repository;
 
   Future<void> checkAuthStatus() async {
     emit(state.copyWith(loading: true));
