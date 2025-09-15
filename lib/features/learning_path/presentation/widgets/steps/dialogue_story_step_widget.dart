@@ -39,82 +39,104 @@ class _DialogueStoryStepWidgetState extends State<DialogueStoryStepWidget>
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.lightBlueAccent, Colors.blueAccent],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
-      ),
       margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4)),
+        ],
+      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            '¡Historia de Diálogo!',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              letterSpacing: 1.2,
-            ),
-          ),
-          const SizedBox(height: 18),
-          ...widget.step.dialogue.map(
-            (line) => AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return Opacity(
-                  opacity: _animation.value.clamp(0.0, 1.0),
-                  child: Transform.translate(
-                    offset: Offset(
-                      0,
-                      (1 - _animation.value.clamp(0.0, 1.0)) * 30,
-                    ),
-                    child: Card(
-                      color: line.speaker == 'Profesor'
-                          ? Colors.orangeAccent
-                          : Colors.greenAccent,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 16,
+          ...widget.step.dialogue.asMap().entries.map((entry) {
+            final i = entry.key;
+            final line = entry.value;
+            final isProfesor = line.speaker == 'Profesor';
+            final isFirst = i == 0;
+            final isPrevProfesor =
+                !isFirst && widget.step.dialogue[i - 1].speaker == 'Profesor';
+            final isPrevAlumno =
+                !isFirst && widget.step.dialogue[i - 1].speaker != 'Profesor';
+            return Column(
+              children: [
+                if (!isFirst &&
+                    ((isProfesor && isPrevAlumno) ||
+                        (!isProfesor && isPrevProfesor)))
+                  const SizedBox(
+                    height: 16,
+                  ), // Espacio extra entre profesor y alumno
+                AnimatedBuilder(
+                  animation: _animation,
+                  builder: (context, child) {
+                    return Opacity(
+                      opacity: _animation.value.clamp(0.0, 1.0),
+                      child: Transform.translate(
+                        offset: Offset(
+                          0,
+                          (1 - _animation.value.clamp(0.0, 1.0)) * 30,
                         ),
                         child: Row(
+                          mainAxisAlignment: isProfesor
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.end,
                           children: [
-                            Icon(
-                              line.speaker == 'Profesor'
-                                  ? Icons.school
-                                  : Icons.person,
-                              color: Colors.white,
-                              size: 28,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                '${line.speaker}: ${line.text}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
+                            if (isProfesor) ...[
+                              CircleAvatar(
+                                backgroundColor: Colors.orangeAccent,
+                                child: Icon(Icons.school, color: Colors.white),
+                              ),
+                              const SizedBox(width: 8),
+                            ],
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                  horizontal: 16,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isProfesor
+                                      ? Colors.orangeAccent
+                                      : Colors.blueAccent,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    topRight: Radius.circular(16),
+                                    bottomLeft: Radius.circular(
+                                      isProfesor ? 16 : 16,
+                                    ),
+                                    bottomRight: Radius.circular(
+                                      isProfesor ? 16 : 16,
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  line.text,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),
+                            if (!isProfesor) ...[
+                              const SizedBox(width: 8),
+                              CircleAvatar(
+                                backgroundColor: Colors.blueAccent,
+                                child: Icon(Icons.person, color: Colors.white),
+                              ),
+                            ],
                           ],
                         ),
                       ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+                    );
+                  },
+                ),
+              ],
+            );
+          }),
         ],
       ),
     );

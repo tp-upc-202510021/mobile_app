@@ -54,20 +54,48 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
       child: Scaffold(
         body: Container(
           width: double.infinity,
-          color: Colors.purple.shade50,
+          color: Colors.white,
           child: Column(
             children: [
-              PreferredSize(
-                preferredSize: const Size.fromHeight(60),
-                child: BlocBuilder<ModuleDetailCubit, ModuleDetailState>(
-                  builder: (context, state) {
-                    if (state.data != null) {
-                      final steps = state.data!.content?.steps ?? [];
-                      final totalPages = steps.length + 1;
-                      return _buildProgressBar(totalPages);
-                    }
-                    return const SizedBox.shrink();
-                  },
+              // Barra de progreso con botón de salir
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 30,
+                  top: 12,
+                  bottom: 12,
+                  left: 8,
+                ),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.black),
+                      tooltip: 'Salir',
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    Expanded(
+                      child: BlocBuilder<ModuleDetailCubit, ModuleDetailState>(
+                        builder: (context, state) {
+                          if (state.data != null) {
+                            final steps = state.data!.content?.steps ?? [];
+                            final totalPages = steps.length;
+                            final progress =
+                                _currentPage /
+                                (totalPages - 1).clamp(1, double.infinity);
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: LinearProgressIndicator(
+                                value: progress.clamp(0.0, 1.0),
+                                backgroundColor: Colors.grey.shade200,
+                                color: Colors.blueAccent,
+                                minHeight: 12,
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Expanded(
@@ -80,7 +108,7 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                     } else if (state.data != null) {
                       final module = state.data!;
                       final steps = module.content?.steps ?? [];
-                      final totalPages = steps.length + 1;
+                      final totalPages = steps.length;
 
                       return Column(
                         children: [
@@ -94,35 +122,7 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                                 });
                               },
                               itemBuilder: (context, index) {
-                                if (index == 0) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(24),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          module.title,
-                                          style: const TextStyle(
-                                            fontSize: 28,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.purple,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 16),
-                                        Text(
-                                          module.description,
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
-
-                                final step = steps[index - 1];
+                                final step = steps[index];
                                 switch (step.type) {
                                   case 'dialogue_story':
                                     return DialogueStoryStepWidget(
@@ -155,45 +155,22 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ElevatedButton(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 24,
+                            ),
+                            child: Center(
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.purpleAccent,
+                                    backgroundColor: Colors.blueAccent,
                                     foregroundColor: Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 24,
-                                      vertical: 12,
-                                    ),
-                                  ),
-                                  onPressed: _currentPage > 0
-                                      ? () => _pageController.previousPage(
-                                          duration: const Duration(
-                                            milliseconds: 300,
-                                          ),
-                                          curve: Curves.easeInOut,
-                                        )
-                                      : null,
-                                  child: const Text(
-                                    'Anterior',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.purpleAccent,
-                                    foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 24,
-                                      vertical: 12,
+                                      vertical: 16,
                                     ),
                                   ),
                                   onPressed: _currentPage < totalPages - 1
@@ -206,10 +183,13 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                                       : null,
                                   child: const Text(
                                     'Siguiente',
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
                           ),
                         ],
