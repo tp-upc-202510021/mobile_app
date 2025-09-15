@@ -19,6 +19,7 @@ class ModuleDetailCubit extends Cubit<ModuleDetailState> {
     emit(ModuleDetailState(loading: true));
     try {
       final moduleDetail = await _repository.getModuleDetail(moduleId);
+      // moduleDetail.content is now LearningModuleContent with steps
       emit(ModuleDetailState(data: moduleDetail));
       return moduleDetail;
     } catch (e) {

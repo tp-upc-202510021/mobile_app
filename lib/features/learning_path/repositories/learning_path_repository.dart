@@ -14,6 +14,7 @@ class LearningPathRepository {
 
   Future<ModuleDetailModel> getModuleDetail(int moduleId) async {
     final data = await _service.fetchModuleDetail(moduleId);
+    // Now expects the new JSON structure with steps
     return ModuleDetailModel.fromJson(data);
   }
 }

@@ -1,3 +1,5 @@
+import 'learning_module_content.dart';
+
 class ModuleDetailModel {
   final int id;
   final String title;
@@ -5,7 +7,7 @@ class ModuleDetailModel {
   final String level;
   final int orderIndex;
   final bool isBlocked;
-  final List<ModulePage> pages;
+  final LearningModuleContent? content;
 
   ModuleDetailModel({
     required this.id,
@@ -14,16 +16,11 @@ class ModuleDetailModel {
     required this.level,
     required this.orderIndex,
     required this.isBlocked,
-    required this.pages,
+    required this.content,
   });
 
   factory ModuleDetailModel.fromJson(Map<String, dynamic> json) {
-    final content = json['content'] as Map<String, dynamic>?;
-
-    final pagesJson = content != null && content['pages'] != null
-        ? content['pages'] as List<dynamic>
-        : [];
-
+    final contentJson = json['content'] as Map<String, dynamic>?;
     return ModuleDetailModel(
       id: json['id'],
       title: json['title'],
@@ -31,18 +28,9 @@ class ModuleDetailModel {
       level: json['level'],
       orderIndex: json['order_index'],
       isBlocked: json['is_blocked'],
-      pages: pagesJson.map((e) => ModulePage.fromJson(e)).toList(),
+      content: contentJson != null
+          ? LearningModuleContent.fromJson(contentJson)
+          : null,
     );
-  }
-}
-
-class ModulePage {
-  final String type;
-  final String content;
-
-  ModulePage({required this.type, required this.content});
-
-  factory ModulePage.fromJson(Map<String, dynamic> json) {
-    return ModulePage(type: json['type'], content: json['content']);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:mobile_app/app/app_root.dart';
@@ -11,9 +12,12 @@ import 'features/authentication/services/auth_service.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
+  // Configura la barra de estado transparente y texto oscuro
+
   final authService = AuthService();
   final authRepo = AuthRepository(authService);
   final webSocketService = WebSocketService();
+
   runApp(
     MultiBlocProvider(
       providers: [
@@ -38,11 +42,12 @@ class Application extends StatelessWidget {
       theme: theme.toApproximateMaterialTheme(),
       builder: (context, child) {
         return FToaster(
-          // ✅ Este se mueve DENTRO del builder
           child: FTheme(
-            // ✅ El tema de forui
             data: theme,
-            child: child!,
+            child: Container(
+              color: theme.colors.background,
+              child: SafeArea(child: child!),
+            ),
           ),
         );
       },

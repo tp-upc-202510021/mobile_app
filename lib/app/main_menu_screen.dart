@@ -96,6 +96,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           footer: FBottomNavigationBar(
             index: _currentIndex,
             onChange: _onTabChanged,
+
             children: [
               buildNavItem(
                 iconData: FIcons.house,
@@ -112,6 +113,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               ),
             ],
           ),
+          childPad: false,
           child: IndexedStack(index: _currentIndex, children: _tabs),
         ),
       ),

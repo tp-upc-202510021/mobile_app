@@ -43,6 +43,7 @@ class LearningPathService {
     );
 
     if (response.statusCode == 200) {
+      // Expects new JSON structure with steps
       return jsonDecode(response.body);
     } else {
       throw Exception('Failed to load module detail');
