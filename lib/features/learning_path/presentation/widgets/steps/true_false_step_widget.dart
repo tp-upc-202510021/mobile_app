@@ -12,6 +12,12 @@ class TrueFalseStepWidget extends StatefulWidget {
 }
 
 class _TrueFalseStepWidgetState extends State<TrueFalseStepWidget> {
+  bool get _hasIncorrect =>
+      _completed &&
+      List.generate(
+        widget.step.statements.length,
+        (i) => _answers[i] == widget.step.statements[i].answer,
+      ).any((v) => !v);
   final List<bool?> _answers = [];
   bool _completed = false;
 
@@ -39,124 +45,160 @@ class _TrueFalseStepWidgetState extends State<TrueFalseStepWidget> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        margin: const EdgeInsets.all(24),
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.greenAccent, Colors.lightGreen],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(28),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.green.withOpacity(0.15),
-              blurRadius: 16,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '¿Verdadero o Falso?',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                letterSpacing: 1.2,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.greenAccent, Colors.lightGreen],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
+              borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.green.withOpacity(0.15),
+                  blurRadius: 16,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
-            const SizedBox(height: 18),
-            ...List.generate(widget.step.statements.length, (i) {
-              final statement = widget.step.statements[i];
-              final selected = _answers[i];
-              final correct = selected != null && selected == statement.answer;
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 350),
-                curve: Curves.easeInOut,
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: Material(
-                  color: correct
-                      ? Colors.green
-                      : selected != null
-                      ? Colors.redAccent
-                      : Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 14,
-                      horizontal: 16,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            statement.text,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: correct || selected != null
-                                  ? Colors.white
-                                  : Colors.black87,
-                              fontWeight: FontWeight.w500,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '¿Verdadero o Falso?',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                ...List.generate(widget.step.statements.length, (i) {
+                  final statement = widget.step.statements[i];
+                  final selected = _answers[i];
+                  final correct =
+                      selected != null && selected == statement.answer;
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.easeInOut,
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: Material(
+                      color: correct
+                          ? Colors.green
+                          : selected != null
+                          ? Colors.redAccent
+                          : Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                          horizontal: 16,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                statement.text,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: correct || selected != null
+                                      ? Colors.white
+                                      : Colors.black87,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
+                            if (!_completed && selected == null)
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.check,
+                                      color: Colors.green,
+                                    ),
+                                    onPressed: () => _select(i, true),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.close, color: Colors.red),
+                                    onPressed: () => _select(i, false),
+                                  ),
+                                ],
+                              ),
+                            if (_completed)
+                              Icon(
+                                correct
+                                    ? Icons.emoji_events
+                                    : Icons.sentiment_dissatisfied,
+                                color: correct
+                                    ? Colors.amber
+                                    : Colors.redAccent,
+                                size: 28,
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+                if (_completed && !_hasIncorrect)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 18),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.celebration,
+                          color: Colors.yellowAccent,
+                          size: 32,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          '¡Completado!',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        if (!_completed)
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.check, color: Colors.green),
-                                onPressed: () => _select(i, true),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.close, color: Colors.red),
-                                onPressed: () => _select(i, false),
-                              ),
-                            ],
-                          ),
-                        if (_completed)
-                          Icon(
-                            correct
-                                ? Icons.emoji_events
-                                : Icons.sentiment_dissatisfied,
-                            color: correct ? Colors.amber : Colors.redAccent,
-                            size: 28,
-                          ),
                       ],
                     ),
                   ),
-                ),
-              );
-            }),
-            if (_completed)
-              Padding(
-                padding: const EdgeInsets.only(top: 18),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.celebration,
-                      color: Colors.yellowAccent,
-                      size: 32,
+              ],
+            ),
+          ),
+          if (_completed && _hasIncorrect)
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      for (var i = 0; i < _answers.length; i++) {
+                        _answers[i] = null;
+                      }
+                      _completed = false;
+                    });
+                    if (widget.onAnswered != null) widget.onAnswered!(false);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.greenAccent,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    const SizedBox(width: 10),
-                    Text(
-                      '¡Completado!',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                  ),
+                  child: const Text('Intentar de nuevo'),
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
