@@ -3,7 +3,9 @@ import 'package:mobile_app/features/learning_path/models/step_types/quiz_step.da
 
 class QuizStepWidget extends StatefulWidget {
   final QuizStep step;
-  const QuizStepWidget({Key? key, required this.step}) : super(key: key);
+  final void Function(bool correct)? onAnswered;
+  const QuizStepWidget({Key? key, required this.step, this.onAnswered})
+    : super(key: key);
 
   @override
   State<QuizStepWidget> createState() => _QuizStepWidgetState();
@@ -19,6 +21,9 @@ class _QuizStepWidgetState extends State<QuizStepWidget> {
       _selectedIndex = index;
       _answered = true;
     });
+    if (widget.onAnswered != null) {
+      widget.onAnswered!(_selectedIndex == widget.step.answer);
+    }
   }
 
   @override

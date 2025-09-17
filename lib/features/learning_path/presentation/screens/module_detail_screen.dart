@@ -20,6 +20,14 @@ class ModuleDetailScreen extends StatefulWidget {
 }
 
 class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
+  // Controla si el step actual está correctamente respondido
+  final ValueNotifier<bool> _canGoNext = ValueNotifier<bool>(false);
+
+  // Permite resetear el step actual desde el padre
+  void _resetCurrentStep() {
+    // Este método se puede usar para llamar a un método de reset en el widget del step si se implementa
+    // Por ahora, solo un placeholder
+  }
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
@@ -110,48 +118,101 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                       final steps = module.content?.steps ?? [];
                       final totalPages = steps.length;
 
+                      // Inicializar _canGoNext según el primer step
+                      if (_currentPage == 0 && steps.isNotEmpty) {
+                        final firstStep = steps[0];
+                        final shouldEnable =
+                            firstStep.type == 'dialogue_story' ||
+                            firstStep.type == 'analogy_card' ||
+                            firstStep.type == 'flashcard';
+                        if (_canGoNext.value != shouldEnable) {
+                          // Solo actualizar si es necesario para evitar loops
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _canGoNext.value = shouldEnable;
+                          });
+                        }
+                      }
+
                       return Column(
                         children: [
                           Expanded(
-                            child: PageView.builder(
-                              controller: _pageController,
-                              itemCount: totalPages,
-                              onPageChanged: (index) {
-                                setState(() {
-                                  _currentPage = index;
-                                });
-                              },
-                              itemBuilder: (context, index) {
-                                final step = steps[index];
-                                switch (step.type) {
-                                  case 'dialogue_story':
-                                    return DialogueStoryStepWidget(
-                                      step: step.data,
-                                    );
-                                  case 'analogy_card':
-                                    return AnalogyCardStepWidget(
-                                      step: step.data,
-                                    );
-                                  case 'flashcard':
-                                    return FlashcardStepWidget(step: step.data);
-                                  case 'quiz':
-                                    return QuizStepWidget(step: step.data);
-                                  case 'true_false':
-                                    return TrueFalseStepWidget(step: step.data);
-                                  case 'fill_blank':
-                                    return FillBlankStepWidget(step: step.data);
-                                  case 'dialogue_fill':
-                                    return DialogueFillStepWidget(
-                                      step: step.data,
-                                    );
-                                  default:
-                                    return const Center(
-                                      child: Text(
-                                        'Tipo de contenido no soportado',
-                                      ),
-                                    );
+                            child: NotificationListener<ScrollNotification>(
+                              onNotification: (notification) {
+                                // Bloquear swipe si no puede avanzar
+                                if (notification is ScrollStartNotification &&
+                                    !_canGoNext.value) {
+                                  return true; // Bloquea el swipe
                                 }
+                                return false;
                               },
+                              child: PageView.builder(
+                                controller: _pageController,
+                                itemCount: totalPages,
+                                onPageChanged: (index) {
+                                  setState(() {
+                                    _currentPage = index;
+                                    final step = steps[index];
+                                    if (step.type == 'dialogue_story' ||
+                                        step.type == 'analogy_card' ||
+                                        step.type == 'flashcard') {
+                                      _canGoNext.value = true;
+                                    } else {
+                                      _canGoNext.value = false;
+                                    }
+                                  });
+                                },
+                                physics: _canGoNext.value
+                                    ? const PageScrollPhysics()
+                                    : const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final step = steps[index];
+                                  // ...existing code...
+                                  switch (step.type) {
+                                    case 'dialogue_story':
+                                      return DialogueStoryStepWidget(
+                                        step: step.data,
+                                      );
+                                    case 'analogy_card':
+                                      return AnalogyCardStepWidget(
+                                        step: step.data,
+                                      );
+                                    case 'flashcard':
+                                      return FlashcardStepWidget(
+                                        step: step.data,
+                                      );
+                                    case 'quiz':
+                                      return QuizStepWidget(
+                                        step: step.data,
+                                        onAnswered: (correct) =>
+                                            _canGoNext.value = correct,
+                                      );
+                                    case 'true_false':
+                                      return TrueFalseStepWidget(
+                                        step: step.data,
+                                        onAnswered: (correct) =>
+                                            _canGoNext.value = correct,
+                                      );
+                                    case 'fill_blank':
+                                      return FillBlankStepWidget(
+                                        step: step.data,
+                                        onAnswered: (correct) =>
+                                            _canGoNext.value = correct,
+                                      );
+                                    case 'dialogue_fill':
+                                      return DialogueFillStepWidget(
+                                        step: step.data,
+                                        onAnswered: (correct) =>
+                                            _canGoNext.value = correct,
+                                      );
+                                    default:
+                                      return const Center(
+                                        child: Text(
+                                          'Tipo de contenido no soportado',
+                                        ),
+                                      );
+                                  }
+                                },
+                              ),
                             ),
                           ),
                           Padding(
@@ -162,32 +223,41 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                             child: Center(
                               child: SizedBox(
                                 width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blueAccent,
-                                    foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                    ),
-                                  ),
-                                  onPressed: _currentPage < totalPages - 1
-                                      ? () => _pageController.nextPage(
-                                          duration: const Duration(
-                                            milliseconds: 300,
+                                child: ValueListenableBuilder<bool>(
+                                  valueListenable: _canGoNext,
+                                  builder: (context, canGo, _) {
+                                    return ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.blueAccent,
+                                        foregroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
                                           ),
-                                          curve: Curves.easeInOut,
-                                        )
-                                      : null,
-                                  child: const Text(
-                                    'Siguiente',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 16,
+                                        ),
+                                      ),
+                                      onPressed:
+                                          (_currentPage < totalPages - 1 &&
+                                              canGo)
+                                          ? () => _pageController.nextPage(
+                                              duration: const Duration(
+                                                milliseconds: 300,
+                                              ),
+                                              curve: Curves.easeInOut,
+                                            )
+                                          : null,
+                                      child: const Text(
+                                        'Siguiente',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),

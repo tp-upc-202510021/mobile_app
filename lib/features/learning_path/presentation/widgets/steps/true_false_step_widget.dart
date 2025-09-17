@@ -3,7 +3,9 @@ import 'package:mobile_app/features/learning_path/models/step_types/true_false_s
 
 class TrueFalseStepWidget extends StatefulWidget {
   final TrueFalseStep step;
-  const TrueFalseStepWidget({Key? key, required this.step}) : super(key: key);
+  final void Function(bool correct)? onAnswered;
+  const TrueFalseStepWidget({Key? key, required this.step, this.onAnswered})
+    : super(key: key);
 
   @override
   State<TrueFalseStepWidget> createState() => _TrueFalseStepWidgetState();
@@ -25,6 +27,13 @@ class _TrueFalseStepWidgetState extends State<TrueFalseStepWidget> {
       _answers[idx] = value;
       _completed = _answers.every((a) => a != null);
     });
+    if (_completed && widget.onAnswered != null) {
+      final allCorrect = List.generate(
+        widget.step.statements.length,
+        (i) => _answers[i] == widget.step.statements[i].answer,
+      ).every((v) => v);
+      widget.onAnswered!(allCorrect);
+    }
   }
 
   @override

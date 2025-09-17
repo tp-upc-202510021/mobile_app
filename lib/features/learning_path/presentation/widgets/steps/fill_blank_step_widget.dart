@@ -3,13 +3,21 @@ import 'package:mobile_app/features/learning_path/models/step_types/fill_blank_s
 
 class FillBlankStepWidget extends StatefulWidget {
   final FillBlankStep step;
-  const FillBlankStepWidget({Key? key, required this.step}) : super(key: key);
+  final void Function(bool correct)? onAnswered;
+  const FillBlankStepWidget({Key? key, required this.step, this.onAnswered})
+    : super(key: key);
 
   @override
   State<FillBlankStepWidget> createState() => _FillBlankStepWidgetState();
 }
 
 class _FillBlankStepWidgetState extends State<FillBlankStepWidget> {
+  void _notifyAnswered() {
+    if (widget.onAnswered != null) {
+      widget.onAnswered!(_selectedIndex == widget.step.answer);
+    }
+  }
+
   int? _selectedIndex;
   bool _answered = false;
 
@@ -19,6 +27,7 @@ class _FillBlankStepWidgetState extends State<FillBlankStepWidget> {
       _selectedIndex = index;
       _answered = true;
     });
+    _notifyAnswered();
   }
 
   @override
