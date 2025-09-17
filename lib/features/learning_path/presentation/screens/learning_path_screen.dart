@@ -57,7 +57,7 @@ class LearningPathScreen extends StatelessWidget {
             }
 
             return ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
               itemCount: modules.length,
               itemBuilder: (_, index) {
                 final module = modules[index];
