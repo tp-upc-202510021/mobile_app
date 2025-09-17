@@ -60,20 +60,20 @@ class AssessmentCubit extends Cubit<AssessmentState> {
             pathCreated: true,
             modulesCreated: 1,
             totalModules: moduleIds.length,
-            quizCreated: true,
+            quizCreated: false,
           ),
         );
         //await quizRepository.generateQuiz(firstModuleId);
 
-        // emit(
-        //   AssessmentProgress(
-        //     assessmentSent: true,
-        //     pathCreated: true,
-        //     modulesCreated: 1,
-        //     totalModules: moduleIds.length,
-        //     quizCreated: true,
-        //   ),
-        // );
+        emit(
+          AssessmentProgress(
+            assessmentSent: true,
+            pathCreated: true,
+            modulesCreated: 1,
+            totalModules: moduleIds.length,
+            quizCreated: true,
+          ),
+        );
       }
 
       emit(AssessmentSuccess());
@@ -86,9 +86,9 @@ class AssessmentCubit extends Cubit<AssessmentState> {
     try {
       emit(AssessmentCreatingModules(current: 0, total: 1, quizCreated: false));
       await repository.createLearningModule(moduleId);
-      emit(AssessmentCreatingModules(current: 1, total: 1, quizCreated: true));
+      emit(AssessmentCreatingModules(current: 1, total: 1, quizCreated: false));
       //await quizRepository.generateQuiz(moduleId);
-      //emit(AssessmentCreatingModules(current: 1, total: 1, quizCreated: true));
+      emit(AssessmentCreatingModules(current: 1, total: 1, quizCreated: true));
       emit(AssessmentSuccess());
     } catch (e) {
       emit(AssessmentError(e.toString()));
