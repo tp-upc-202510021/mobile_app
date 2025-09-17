@@ -106,6 +106,7 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                   ],
                 ),
               ),
+
               Expanded(
                 child: BlocBuilder<ModuleDetailCubit, ModuleDetailState>(
                   builder: (context, state) {
@@ -193,16 +194,82 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                                             _canGoNext.value = correct,
                                       );
                                     case 'fill_blank':
-                                      return FillBlankStepWidget(
-                                        step: step.data,
-                                        onAnswered: (correct) =>
-                                            _canGoNext.value = correct,
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          FillBlankStepWidget(
+                                            step: step.data,
+                                            onAnswered: (correct) =>
+                                                _canGoNext.value = correct,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 12,
+                                              bottom: 8,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.touch_app,
+                                                  color: Colors.deepOrange,
+                                                  size: 20,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  'Arrastra la opción al espacio en blanco',
+                                                  style: TextStyle(
+                                                    color: Colors.deepOrange,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       );
                                     case 'dialogue_fill':
-                                      return DialogueFillStepWidget(
-                                        step: step.data,
-                                        onAnswered: (correct) =>
-                                            _canGoNext.value = correct,
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          DialogueFillStepWidget(
+                                            step: step.data,
+                                            onAnswered: (correct) =>
+                                                _canGoNext.value = correct,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 12,
+                                              bottom: 8,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.touch_app,
+                                                  color: Colors.deepOrange,
+                                                  size: 20,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  'Arrastra la opción al espacio en blanco',
+                                                  style: TextStyle(
+                                                    color: Colors.deepOrange,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       );
                                     default:
                                       return const Center(

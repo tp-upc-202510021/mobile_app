@@ -278,24 +278,6 @@ class _DialogueFillStepWidgetState extends State<DialogueFillStepWidget> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.touch_app, color: Colors.pinkAccent, size: 20),
-                const SizedBox(width: 8),
-                Text(
-                  'Arrastra las opciones a los espacios en blanco',
-                  style: TextStyle(
-                    color: Colors.pinkAccent,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
