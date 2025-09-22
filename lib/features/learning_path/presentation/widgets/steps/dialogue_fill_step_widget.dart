@@ -288,11 +288,21 @@ class _DialogueFillStepWidgetState extends State<DialogueFillStepWidget> {
     final selected = _selectedIndexes[blankIdx];
     final correct =
         selected != null && selected == widget.step.answers[blankIdx];
+    // Definir un ancho fijo para el blank (ajustar si tus opciones son más largas)
+    const double blankWidth = 100;
     return DragTarget<int>(
       builder: (context, candidateData, rejectedData) {
+        String displayText;
+        if (selected != null) {
+          displayText = widget.step.options[selected];
+        } else if (candidateData.isNotEmpty) {
+          displayText = 'Suelta aquí';
+        } else {
+          displayText = '______';
+        }
         return AnimatedContainer(
           duration: const Duration(milliseconds: 250),
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
           decoration: BoxDecoration(
             color: correct
                 ? Colors.greenAccent
@@ -307,16 +317,20 @@ class _DialogueFillStepWidgetState extends State<DialogueFillStepWidget> {
               width: 2,
             ),
           ),
-          child: Text(
-            selected != null
-                ? widget.step.options[selected]
-                : (candidateData.isNotEmpty ? 'Suelta aquí' : '______'),
-            style: TextStyle(
-              fontSize: 16,
-              color: correct || selected != null
-                  ? Colors.white
-                  : Colors.black87,
-              fontWeight: FontWeight.w500,
+          child: SizedBox(
+            width: blankWidth,
+            child: Center(
+              child: Text(
+                displayText,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: correct || selected != null
+                      ? Colors.white
+                      : Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
           ),
         );
@@ -366,31 +380,6 @@ class _DialogueFillStepWidgetState extends State<DialogueFillStepWidget> {
         style: TextStyle(
           fontSize: 16,
           color: isSelected || dragging ? Colors.white : Colors.black87,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBlank(int blankIdx) {
-    final selected = _selectedIndexes[blankIdx];
-    final correct =
-        selected != null && selected == widget.step.answers[blankIdx];
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      decoration: BoxDecoration(
-        color: correct
-            ? Colors.greenAccent
-            : selected != null
-            ? Colors.redAccent
-            : Colors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        selected != null ? widget.step.options[selected] : '______',
-        style: TextStyle(
-          fontSize: 16,
-          color: correct || selected != null ? Colors.white : Colors.black87,
           fontWeight: FontWeight.w500,
         ),
       ),
