@@ -104,9 +104,9 @@ class ModuleCard extends StatelessWidget {
             ),
           ),
 
-          // Optional lock overlay
-          if (isBlocked)
-            const Icon(Icons.lock, color: Colors.redAccent, size: 24),
+          // // Optional lock overlay
+          // if (isBlocked)
+          //   const Icon(Icons.lock, color: Colors.redAccent, size: 24),
         ],
       ),
     );
