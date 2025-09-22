@@ -41,7 +41,7 @@ class _ModuleLoadingScreenState extends State<ModuleLoadingScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFF3F7FF),
+        backgroundColor: Colors.transparent,
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -58,7 +58,12 @@ class _ModuleLoadingScreenState extends State<ModuleLoadingScreen> {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('🚀', style: TextStyle(fontSize: 64)),
+                    Image.asset(
+                      'assets/images/rocket_load.png',
+                      width: 280,
+                      height: 280,
+                      fit: BoxFit.contain,
+                    ),
                     const SizedBox(height: 20),
                     const Text(
                       'Estamos creando tu contenido personalizado...',
