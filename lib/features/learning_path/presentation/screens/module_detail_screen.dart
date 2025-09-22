@@ -10,6 +10,11 @@ import 'package:mobile_app/features/learning_path/presentation/widgets/steps/qui
 import 'package:mobile_app/features/learning_path/presentation/widgets/steps/true_false_step_widget.dart';
 import 'package:mobile_app/features/learning_path/presentation/widgets/steps/fill_blank_step_widget.dart';
 import 'package:mobile_app/features/learning_path/presentation/widgets/steps/dialogue_fill_step_widget.dart';
+import 'package:mobile_app/features/feedback/presentation/widgets/feedback_dialog.dart';
+import 'package:mobile_app/features/feedback/presentation/cubit/feedback_cubit.dart';
+import 'package:mobile_app/features/feedback/data/services/feedback_service.dart';
+import 'package:mobile_app/features/feedback/data/repositories/feedback_repository_adapter.dart';
+import 'package:mobile_app/features/feedback/domain/usecases/feedback_usecases.dart';
 
 class ModuleDetailScreen extends StatefulWidget {
   final int moduleId;
@@ -293,6 +298,8 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                                 child: ValueListenableBuilder<bool>(
                                   valueListenable: _canGoNext,
                                   builder: (context, canGo, _) {
+                                    final isLastPage =
+                                        _currentPage == totalPages - 1;
                                     return ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.blueAccent,
@@ -306,19 +313,54 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                                           vertical: 16,
                                         ),
                                       ),
-                                      onPressed:
-                                          (_currentPage < totalPages - 1 &&
-                                              canGo)
-                                          ? () => _pageController.nextPage(
-                                              duration: const Duration(
-                                                milliseconds: 300,
-                                              ),
-                                              curve: Curves.easeInOut,
-                                            )
+                                      onPressed: (canGo)
+                                          ? () async {
+                                              if (!isLastPage) {
+                                                _pageController.nextPage(
+                                                  duration: const Duration(
+                                                    milliseconds: 300,
+                                                  ),
+                                                  curve: Curves.easeInOut,
+                                                );
+                                              } else {
+                                                // Mostrar feedback dialog al finalizar
+                                                await showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (ctx) {
+                                                    return BlocProvider(
+                                                      create: (_) => FeedbackCubit(
+                                                        getQuestionsUseCase:
+                                                            GetFeedbackQuestionsUseCase(
+                                                              FeedbackRepositoryAdapter(
+                                                                FeedbackService(),
+                                                              ),
+                                                            ),
+                                                        saveResponsesUseCase:
+                                                            SaveFeedbackResponsesUseCase(
+                                                              FeedbackRepositoryAdapter(
+                                                                FeedbackService(),
+                                                              ),
+                                                            ),
+                                                      ),
+                                                      child: FeedbackDialog(
+                                                        moduleId:
+                                                            widget.moduleId,
+                                                        onSubmitted: () {
+                                                          Navigator.of(
+                                                            context,
+                                                          ).pop();
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              }
+                                            }
                                           : null,
-                                      child: const Text(
-                                        'Siguiente',
-                                        style: TextStyle(
+                                      child: Text(
+                                        isLastPage ? 'Finalizar' : 'Siguiente',
+                                        style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                         ),

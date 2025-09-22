@@ -73,7 +73,7 @@ class LearningPathScreen extends StatelessWidget {
                         detail.content != null &&
                         detail.content!.steps.isNotEmpty) {
                       print('Module ID: ${module.id}');
-                      Navigator.push(
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => BlocProvider.value(
@@ -82,6 +82,10 @@ class LearningPathScreen extends StatelessWidget {
                           ),
                         ),
                       );
+                      // Refrescar el cubit al volver
+                      final learningPathCubit = context
+                          .read<LearningPathCubit>();
+                      learningPathCubit.loadLearningPath();
                     } else {
                       final quizService = QuizService();
                       final quizRepository = QuizRepository(quizService);
@@ -94,7 +98,7 @@ class LearningPathScreen extends StatelessWidget {
                         quizRepository: quizRepository,
                       );
 
-                      Navigator.push(
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => MultiBlocProvider(
@@ -106,6 +110,10 @@ class LearningPathScreen extends StatelessWidget {
                           ),
                         ),
                       );
+                      // Refrescar el cubit al volver
+                      final learningPathCubit = context
+                          .read<LearningPathCubit>();
+                      learningPathCubit.loadLearningPath();
                     }
                   },
                   child: Padding(
