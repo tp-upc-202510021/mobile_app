@@ -21,7 +21,7 @@ class GameMenuScreen extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           'Jugar y Aprender',
@@ -46,8 +46,8 @@ class GameMenuScreen extends StatelessWidget {
               // Animated money bag (bigger)
               TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0.0, end: 1.0),
-                duration: const Duration(seconds: 1),
-                curve: Curves.elasticOut,
+                duration: const Duration(milliseconds: 1600),
+                curve: Curves.easeOutCubic,
                 builder: (context, value, child) {
                   return Transform.translate(
                     offset: Offset(0, -40 * (1 - value)),
