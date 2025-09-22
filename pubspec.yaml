@@ -1,5 +1,5 @@
 name: mobile_app
-description: "A new Flutter project."
+description: "Aprender Finanzas Jugando"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -46,6 +46,7 @@ dependencies:
   confetti: ^0.8.0
   flutter_svg: ^2.2.0
   http_interceptor: ^2.0.0
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +61,10 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon.png"
 
 # The following section is specific to Flutter packages.
 flutter:
