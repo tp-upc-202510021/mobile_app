@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mobile_app/config/api_config.dart';
 import '../models/feedback_models.dart';
 
 class FeedbackService {
@@ -10,7 +9,9 @@ class FeedbackService {
   Future<List<FeedbackQuestionModel>> fetchQuestions() async {
     final token = await _storage.read(key: 'access_token');
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/feedback/questions'),
+      Uri.parse(
+        'https://backend-production-1f432.up.railway.app/feedback/questions',
+      ),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -35,7 +36,9 @@ class FeedbackService {
   ) async {
     final token = await _storage.read(key: 'access_token');
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/feedback/save-response/'),
+      Uri.parse(
+        'https://backend-production-1f432.up.railway.app/feedback/save-response/',
+      ),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

@@ -147,36 +147,36 @@ class GameMenuScreen extends StatelessWidget {
               ),
               const SizedBox(height: 18),
               // Instructions button
-              SizedBox(
-                width: 240,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent.withOpacity(0.08),
-                    foregroundColor: Colors.blueAccent,
-                    side: const BorderSide(color: Colors.blueAccent, width: 2),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    textStyle: const TextStyle(
-                      fontFamily: 'Fredoka',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  onPressed: () {
-                    // Navegación a instrucciones
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.menu_book, size: 24),
-                      SizedBox(width: 10),
-                      Text('Ver instrucciones'),
-                    ],
-                  ),
-                ),
-              ),
+              // SizedBox(
+              //   width: 240,
+              //   child: OutlinedButton(
+              //     style: OutlinedButton.styleFrom(
+              //       backgroundColor: Colors.blueAccent.withOpacity(0.08),
+              //       foregroundColor: Colors.blueAccent,
+              //       side: const BorderSide(color: Colors.blueAccent, width: 2),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(30),
+              //       ),
+              //       textStyle: const TextStyle(
+              //         fontFamily: 'Fredoka',
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 18,
+              //       ),
+              //       padding: const EdgeInsets.symmetric(vertical: 16),
+              //     ),
+              //     onPressed: () {
+              //       // Navegación a instrucciones
+              //     },
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: const [
+              //         Icon(Icons.menu_book, size: 24),
+              //         SizedBox(width: 10),
+              //         Text('Ver instrucciones'),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               const SizedBox(height: 30),
             ],
           ),
