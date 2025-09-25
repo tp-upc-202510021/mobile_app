@@ -80,6 +80,7 @@ class LearningPathScreen extends StatelessWidget {
                             value: moduleDetailCubit,
                             child: ModuleDetailScreen(moduleId: module.id!),
                           ),
+                          settings: RouteSettings(name: 'ModuleDetailScreen'),
                         ),
                       );
                       // Refrescar el cubit al volver

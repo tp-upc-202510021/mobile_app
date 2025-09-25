@@ -6,6 +6,7 @@ import 'package:mobile_app/features/authentication/presentation/cubit/auth_cubit
 import 'package:mobile_app/features/authentication/presentation/screens/login_screen.dart';
 import 'package:mobile_app/features/home/presentation/screens/home_screen.dart';
 import 'package:mobile_app/features/profile/presentation/profile_screen.dart';
+import 'package:mobile_app/main.dart' show AnalyticsNavigatorObserver;
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -33,6 +34,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   ) {
     return Navigator(
       key: key,
+      observers: [AnalyticsNavigatorObserver()],
       onGenerateRoute: (_) => MaterialPageRoute(builder: (_) => child),
     );
   }
