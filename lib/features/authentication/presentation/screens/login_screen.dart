@@ -4,7 +4,6 @@ import 'package:forui/forui.dart';
 import 'package:mobile_app/app/main_menu_screen.dart';
 import 'package:mobile_app/features/authentication/presentation/screens/register_screen.dart';
 import 'package:mobile_app/features/authentication/presentation/cubit/auth_cubit.dart';
-import 'package:mobile_app/shared/widgets/test_visual_widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

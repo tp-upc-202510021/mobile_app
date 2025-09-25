@@ -92,10 +92,10 @@ class ProfileScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () => print('Editar perfil'),
-                        ),
+                        // IconButton(
+                        //   icon: const Icon(Icons.edit),
+                        //   onPressed: () => print('Editar perfil'),
+                        // ),
                       ],
                     ),
 
@@ -174,12 +174,12 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          FButton(
-                            style: FButtonStyle.secondary,
-                            prefix: Icon(FIcons.settings),
-                            onPress: () => print('Ir a Opciones'),
-                            child: const _NavItem(title: 'Opciones'),
-                          ),
+                          // FButton(
+                          //   style: FButtonStyle.secondary,
+                          //   prefix: Icon(FIcons.settings),
+                          //   onPress: () => print('Ir a Opciones'),
+                          //   child: const _NavItem(title: 'Opciones'),
+                          // ),
                           const SizedBox(height: 15),
                           FButton(
                             style: FButtonStyle.secondary,

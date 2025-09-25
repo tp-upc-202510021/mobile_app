@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "351263109329",
+    "project_id": "tp2-finanzas",
+    "storage_bucket": "tp2-finanzas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:351263109329:android:967eb29f7e912ed13d55f0",
+        "android_client_info": {
+          "package_name": "com.tp2.finanzas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB87XwDrXx7gRFfXwOdEmkJnwCmXQxc5_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
